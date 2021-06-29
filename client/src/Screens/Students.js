@@ -3,8 +3,7 @@ import List from '../Components/List'
 
 export default function Students() {
     return (
-        
-        <div className="m-5">
+        <div style={{margin:"3rem 3rem 3rem 100px"}}>
             <div className="Head pb-3">
                 <span className="h1">Students</span>
             </div>

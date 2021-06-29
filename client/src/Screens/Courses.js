@@ -3,7 +3,7 @@ import Card from '../Components/Card'
 
 export default function Courses() {
     return (
-        <div className="m-5">
+        <div style={{margin:"3rem 3rem 3rem 100px"}}>
             <div className="Head pb-3">
                 <span className="h1">Courses</span>
             </div>

@@ -1,19 +1,21 @@
 import './App.css';
-import Navbar from './Components/Navbar';
-// import Drawer from './Components/Drawer';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {
+  BrowserRouter as Router, 
+  Switch, 
+  Route} from 'react-router-dom'
 import Home from './Screens/Home';
-import Courses from './Screens/Courses';
-import Students from './Screens/Students';
+import Login from './Screens/Login';
+
 
 function App() {
+  
   return (
     <>
     <Router>
-      <Navbar/>
-      {/* <Drawer/> */}
+      
       <Switch>
-        <Route path="/" exact component={Students} />
+        <Route path="/" exact component={Home} />
+        <Route path="/login" exact component={Login} />
       </Switch>
     </Router>
     </>

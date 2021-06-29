@@ -1,0 +1,27 @@
+.list-row{
+    display: flex;
+
+}
+.list-col-5{
+    width: 60px;
+    padding: 2px;
+}
+.list-col-1{
+    width: 50px;
+    padding: 2px;
+}
+
+.list-col-2{
+    width: 90px;
+    padding: 2px;
+}
+
+.list-col-3{
+    width: 120px;
+    padding: 2px;
+    text-align: start
+}
+.list-col-6{
+    width: 70px;
+    padding: 2px;
+}

@@ -98,10 +98,11 @@
     display: flex;
     justify-content: start;
     align-items: center;
+    z-index: 9999;
   }
   
   .menu-icons {
-    margin-left: 2rem;
+    margin-left: -5px;
     font-size: 2rem;
     background: none;
   }
@@ -113,9 +114,9 @@
     display: flex;
     justify-content: center;
     position: fixed;
-    top: 0;
-    left: -100%;
+    left: -15%;
     transition: 850ms;
+    z-index: 9999;
   }
   
   .nav-menu.active {

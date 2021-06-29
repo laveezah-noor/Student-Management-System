@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
-// import Button from './Button';  
 import './Navbar.css';
+import {NavData} from './Data';
 
 export default function Navbar() {
     const [click, setClick] = useState(false);
-    const [button, setButton] = useState(true)
+    const [button, setButton] = useState(true);
 
     const handleClick = () => {
         setClick(!click)
@@ -27,6 +27,7 @@ export default function Navbar() {
     useEffect(() => {
         showButton()
     }, [])
+    
 
     return (
         <>
@@ -43,7 +44,19 @@ export default function Navbar() {
           </div>
           <nav className={click ? 'nav-menu active' : 'nav-menu'}>
             <ul className="nav-menu-items">
-              <li className='nav-items'> 
+              {
+                NavData.map(item=>{
+                  return(
+                  <li className='nav-items'> 
+                    <Link 
+                    to={item.path} 
+                    className='nav-links'>
+                    {item.title}
+                    </Link>
+                  </li>
+                )})
+              }
+              {/* <li className='nav-items'> 
                 <Link to='/' className='nav-links' onClick={closeMenu}>
                   Home
                 </Link>
@@ -74,7 +87,7 @@ export default function Navbar() {
                 >
                   Sign Up
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
         </>
