@@ -2,18 +2,17 @@ import React from 'react'
 import { Switch, Route } from "react-router-dom";
 import Navbar from '../Components/Navbar';
 import Dashboard from './Dashboard';
-import Courses from './Courses';
 import Students from './Students';
+import Course from './Course';
 
 export default function Home() {
     return (
         <>
         <Navbar/>
-        <Switch>
-            <Route path="/dashboard" exact component={Dashboard} />
-            <Route path="/courses" exact component={Courses} />
-            <Route path="/students" exact component={Students} />
-        </Switch>
+        <div style={{backgroundColor:"beige"}}>
+            <h2>Home Page</h2>
+        </div>
+        
         </>
     )
 }

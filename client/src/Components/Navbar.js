@@ -4,7 +4,7 @@ import './Navbar.css';
 import {NavData} from './Data';
 
 export default function Navbar() {
-    const [click, setClick] = useState(false);
+    const [click, setClick] = useState(true);
     const [button, setButton] = useState(true);
 
     const handleClick = () => {

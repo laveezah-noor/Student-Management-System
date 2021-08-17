@@ -3,22 +3,32 @@ import {
   BrowserRouter as Router, 
   Switch, 
   Route} from 'react-router-dom'
+import Dashboard from './Screens/Dashboard';
 import Home from './Screens/Home';
-import Login from './Screens/Login';
-
+import Course from './Screens/Course';
+import Instructor from './Screens/Instructor';
+import Students from './Screens/Students';
+import Sidebar from './Components/Sidebar';
 
 function App() {
   
   return (
-    <>
+    <div className="App">
+   
     <Router>
-      
+      <Sidebar/>
+      <div className="Screens">
       <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/login" exact component={Login} />
+        <Route path="/dashboard" exact component={Dashboard} />
+        <Route path="/course" exact component={Course} />
+        <Route path="/instructor" exact component={Instructor} />
+        <Route path="/student" exact component={Students} />
+        <Route path="/home" exact component={Home} />
       </Switch>
+      </div>
+
     </Router>
-    </>
+    </div>
   );
 }
 
