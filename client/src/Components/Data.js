@@ -23,12 +23,7 @@ const StudentData = [
         class: "yellowgreen", 
         value: "05"
     },
-    {
-        title: "Courses",
-        icon: "fa-chalkboard", 
-        class: "red", 
-        value: "05"
-    },
+    
     {
         title: "Events",
         icon: "fa-flag", 

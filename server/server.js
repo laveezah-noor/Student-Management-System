@@ -8,6 +8,23 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/dashboard', (req, res) => {
+  const SELECT_ALL_TASKS = `
+  SELECT 'Courses' AS label, COUNT(*) AS value FROM COURSE
+  UNION 
+  SELECT 'Students' AS label, COUNT(*) FROM STUDENT
+  UNION 
+  SELECT 'Instructors' AS label, COUNT(*) FROM INSTRUCTOR;
+  `;
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.get('/course', (req, res) => {
   const SELECT_ALL_TASKS = `
   SELECT C.ID,C.CourseName,C.InstructorID, concat(I.FirstName,' ',I.LastName) AS InstructorName
