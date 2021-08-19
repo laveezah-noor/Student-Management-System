@@ -9,6 +9,9 @@ import Course from './Screens/Course';
 import Instructor from './Screens/Instructor';
 import Students from './Screens/Students';
 import Sidebar from './Components/Sidebar';
+import Courses from './Screens/Courses';
+import Classrrom from './Screens/Classroom';
+import Users from './Screens/Users';
 
 function App() {
   
@@ -24,6 +27,9 @@ function App() {
         <Route path="/instructor" exact component={Instructor} />
         <Route path="/student" exact component={Students} />
         <Route path="/home" exact component={Home} />
+        <Route path="/courses" exact component={Courses} />
+        <Route path="/classroom/:courseid" exact component={Classrrom} />
+        <Route path="/users" exact component={Users} />
       </Switch>
       </div>
 

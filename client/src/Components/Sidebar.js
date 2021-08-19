@@ -12,20 +12,35 @@ const SidebarData = [{
         link:'/dashboard'
     },
     {
-        title: 'Courses',
+        title: 'All Courses',
         icon: 'book-fill',
         link:'/course'
     },
     {
-        title: 'Instructors',
+        title: 'All Instructors',
         icon: 'person-fill',
         link:'/instructor'
     },
     {
-        title: 'Students',
+        title: 'All Students',
         icon: 'people-fill',
         link:'/student'
     },
+    {
+        title: 'Courses',
+        icon: 'people-fill',
+        link:'/courses'
+    },
+    {
+        title: 'Classroom',
+        icon: 'people-fill',
+        link:'/classroom'
+    },
+    {
+        title: 'Users',
+        icon: 'people-fill',
+        link:'/users'
+    }
 
 ]
 export default function Sidebar() {

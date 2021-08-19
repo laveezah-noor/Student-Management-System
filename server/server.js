@@ -25,6 +25,52 @@ app.get('/dashboard', (req, res) => {
   });
 });
 
+
+app.get('/classroom/:courseid', (req, res) => {
+  const COURSEDATA = `
+  CALL ClassroomCourse(${req.params.courseid});
+  CALL ClassroomStudent(${req.params.courseid});
+  CALL ClassroomLecture(${req.params.courseid})
+`
+  connection.query((COURSEDATA), (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result) 
+    }
+  });
+});
+
+
+app.get('/role', (req, res) => {
+  const SELECT_ALL_TASKS = `
+  SELECT * FROM ROLE;
+  `;
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.get('/user', (req, res) => {
+  const SELECT_ALL_TASKS = `
+  SELECT U.UserID,U.RoleID,U.UserName,UserPassword,R.Role
+  FROM USERS U
+  inner JOIN ROLE R ON U.RoleID=R.RoleID;
+  `;
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.get('/course', (req, res) => {
   const SELECT_ALL_TASKS = `
   SELECT C.ID,C.CourseName,C.InstructorID, concat(I.FirstName,' ',I.LastName) AS InstructorName
@@ -86,8 +132,10 @@ app.get('/instructor', (req, res) => {
   });
 });
 
-app.post('/addInstructor', (req, res) => {
-  const ADD_TASK = `INSERT INTO INSTRUCTOR (FirstName, LastName, Contact, Email) VALUES ('${req.body.FirstName}', '${req.body.LastName}', '${req.body.Contact}', '${req.body.Email}')`;
+app.post('/addUser', (req, res) => {
+  const ADD_TASK = `CALL InsertUser
+  (${req.body.Role},'${req.body.UserName}','${req.body.UserPassword}','${req.body.FirstName}','${req.body.LastName}','${req.body.Email}','${req.body.Contact}')
+  `;
   console.log(ADD_TASK, `add instructor`);
   connection.query(ADD_TASK, (err) => {
     if (err) {

@@ -92,6 +92,7 @@ export default function Course (props){
     useEffect(() => {
         getCourseList();
     }, [props]);
+    
     return (
         <div>
             <h3 className="mt-3 mb-2 mx-5">Courses List</h3>

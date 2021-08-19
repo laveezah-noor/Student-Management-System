@@ -5,6 +5,6 @@ const connection = sql.createConnection({
   user: 'user',
   password: 'Allan.3048',
   database: 'ClassroomSystem',
-});
+  multipleStatements: true});
 
 module.exports = connection;

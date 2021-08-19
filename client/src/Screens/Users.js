@@ -1,35 +1,35 @@
-// import React from 'react'
 import List from '../Components/List'
 import React,{useState, useEffect} from 'react';
 import axios from 'axios';
 import $ from 'jquery';
 
-export default function Students(props){
+export default function Users(props){
     const FiltersList=[
         {label: '', value: ''},
         {label: 'ID', value: 'ID'},
-        {label: 'FirstName', value: 'FirstName'},
-        {label: 'LastName', value: 'LastName'}
+        {label: 'UserName', value: 'UserName'},
+        // {label: 'UserPassword', value: 'UserPassword'}
     ]
-    const [StudentList, setStudentList] = useState([]);
+    const [UserList, setUserList] = useState([]);
+    const [RoleList, setRoleList] = useState([]);
     const [ModalTitle, setModalTitle] = useState('');
-    const [StudentID, setStudentID] = useState(0);
+    const [UserID, setUserID] = useState(0);
     const [UserName, setUserName] = useState('');
     const [UserPassword, setUserPassword] = useState('');
     const [Role, setRole] = useState('');
     const [FirstName, setFirstName] = useState('');
     const [LastName, setLastName] = useState('');
-    const [Contact, setContact] = useState('');
     const [Email, setEmail] = useState('');
+    const [Contact, setContact] = useState('');
     const [Filter,setFilter] = useState('')
 
     const getSortedList = () => {
         console.log(Filter)
         if (Filter!=''){
             axios
-          .get(`http://localhost:4000/studentsorted/${Filter}`)
+          .get(`http://localhost:4000/Usersorted/${Filter}`)
           .then((response) => response.data)
-          .then((response) => setStudentList(response));
+          .then((response) => setUserList(response));
         }
         
     };
@@ -37,41 +37,45 @@ export default function Students(props){
         setFilter(e);
         getSortedList()
     };
-    const getStudentList = () => {
+    const getUserList = () => {
         axios
-          .get(`http://localhost:4000/student`)
+          .get(`http://localhost:4000/User`)
           .then((response) => response.data)
-          .then((response) => setStudentList(response));
+          .then((response) => setUserList(response));
+          axios
+          .get(`http://localhost:4000/role`)
+          .then((response) => response.data)
+          .then((response) => setRoleList(response));
+        
     };
-    const addClick = () =>{
-        setModalTitle("Add Student")
+    const addClick = () =>{ 
+        setModalTitle("Add User")
         setUserName('');
         setUserPassword('');
-        setRole(1);
+        setRole('');
         setFirstName('');
         setLastName('');
         setContact('');
         setEmail('');
     
     };
-    const editClick = (Student) =>{
-        setModalTitle("Edit Student")
-        setFirstName(Student.FirstName);
-        setLastName(Student.LastName);
-        setContact(Student.Contact);
-        setEmail(Student.Email);
-        setStudentID(Student.ID)
+    const editClick = (User) =>{
+        setModalTitle("Edit User")
+        setUserName(User.UserName);
+        setUserPassword(User.UserPassword);
+        setRole(User.Role);
+        setUserID(User.ID)
     };
-    const deleteClick = (StudentID) =>{
+    const deleteClick = (UserID) =>{
 
         if(window.confirm('Are you sure?')){
             axios
-              .delete(`http://localhost:4000/Student/${StudentID}`, {
+              .delete(`http://localhost:4000/User/${UserID}`, {
                 method: 'DELETE',
               })
               .then((result) => {
                 console.log(result);
-                getStudentList();
+                getUserList();
             } // fetching the updated list
                 ,(error)=>{
                 alert('Failed');
@@ -93,7 +97,7 @@ export default function Students(props){
               })
               .then((result) => {
                 console.log(result);
-                getStudentList();
+                getUserList();
                 $('#exampleModal .btn-close').click()
             } // fetching the updated list
                 ,(error)=>{
@@ -107,16 +111,15 @@ export default function Students(props){
 
         if(window.confirm('Are you sure?')){
             axios
-              .put(`http://localhost:4000/updateStudent`, {
-                StudentID,
-                FirstName,
-                LastName,
-                Contact,
-                Email
+              .put(`http://localhost:4000/updateUser`, {
+                UserID,
+                UserName,
+                UserPassword,
+                Role
               })
               .then((result) => {
                 console.log(result);
-                getStudentList();
+                getUserList();
             } // fetching the updated list
                 ,(error)=>{
                 alert('Failed');
@@ -126,11 +129,12 @@ export default function Students(props){
     };
     
     useEffect(() => {
-        getStudentList();
+        getUserList();
     }, [props]);
+    console.log(UserList);
     return (
         <div>
-            <h3 className="mt-3 mb-2 mx-5">Student List</h3>
+            <h3 className="mt-3 mb-2 mx-5">User List</h3>
             <div className="d-flex flex-row mx-5">
 
 
@@ -170,41 +174,41 @@ export default function Students(props){
             <thead>
             <tr>
                 <th>
-                    Student Id
+                    User Id
                 </th>
                 <th>
-                    First Name
+                    User Name
 
                 </th>
                 <th>
-                    Last Name
+                    User Password
 
                 </th>
                 <th>
-                    Contact
+                    Role
                 </th>
-                <th>
+                {/* <th>
                     Email
-                </th>
+                </th> */}
                 <th>
                     Options
                 </th>
             </tr>
             </thead>
             <tbody>
-                {StudentList.map(Student=>
-                    <tr key={Student.ID}>
-                        <td>{Student.RoleID}{Student.ID}</td>
-                        <td>{Student.FirstName}</td>
-                        <td>{Student.LastName}</td>
-                        <td>{Student.Contact}</td>
-                        <td>{Student.Email}</td>
+                {UserList.map(User=>
+                    <tr key={User.ID}>
+                        <td>{User.RoleID}{User.UserID}</td>
+                        <td>{User.UserName}</td>
+                        <td>{User.UserPassword}</td>
+                        <td>{User.Role}</td>
+                        {/* <td>{User.Email}</td> */}
                         <td>
                         <button type="button"
                         className="btn btn-light mr-1"
                         data-bs-toggle="modal"
                         data-bs-target="#exampleModal"
-                        onClick={()=>editClick(Student)}
+                        onClick={()=>editClick(User)}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -214,7 +218,7 @@ export default function Students(props){
                 
                         <button type="button"
                         className="btn btn-light mr-1"
-                        onClick={()=>deleteClick(Student.ID)}
+                        onClick={()=>deleteClick(User.ID)}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash-fill" viewBox="0 0 16 16">
                             <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
@@ -242,35 +246,6 @@ export default function Students(props){
                      <div className="p-2 w-50 bd-highlight">
 
                         <div className="input-group mb-3">
-                            <span className="input-group-text">First Name</span>
-                            <input type="text" className="form-control"
-                            value={FirstName}
-                            onChange={(e)=>setFirstName(e.target.value)}/>
-                        </div>
-
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">Last Name</span>
-                            <input type="text" className="form-control"
-                            value={LastName}
-                            onChange={(e)=>setLastName(e.target.value)}/>
-                        </div>
-
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">Email</span>
-                            <input type="email" className="form-control"
-                            value={Email}
-                            onChange={(e)=>setEmail(e.target.value)}/>
-                        </div>
-                                
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">Contact</span>
-                            <input type="text" className="form-control"
-                            value={Contact}
-                            onChange={(e)=>setContact(e.target.value)}/>
-                        </div>
-                        {StudentID==0?
-                        <div>
-                        <div className="input-group mb-3">
                             <span className="input-group-text">User Name</span>
                             <input type="text" className="form-control"
                             value={UserName}
@@ -283,7 +258,7 @@ export default function Students(props){
                             value={UserPassword}
                             onChange={(e)=>setUserPassword(e.target.value)}/>
                         </div>
-                        {/* <div className="input-group mb-3">
+                        <div className="input-group mb-3">
                             <span className="input-group-text">Role</span>
                             <select className="form-select"
                             onChange={(e)=>{setRole(e.target.value);console.log(Role)}}
@@ -293,11 +268,38 @@ export default function Students(props){
                                     {role.Role}
                                 </option>)}
                             </select>
-                        </div> */}
                         </div>
-                        :null}      
+                                
                                 
                      </div>
+                     {UserID==0?
+                     <div>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text">First Name</span>
+                            <input type="email" className="form-control"
+                            value={FirstName}
+                            onChange={(e)=>setFirstName(e.target.value)}/>
+                        </div>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text">Last Name</span>
+                            <input type="text" className="form-control"
+                            value={LastName}
+                            onChange={(e)=>setLastName(e.target.value)}/>
+                        </div>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text">Email</span>
+                            <input type="text" className="form-control"
+                            value={Email}
+                            onChange={(e)=>setEmail(e.target.value)}/>
+                        </div>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text">Contact</span>
+                            <input type="text" className="form-control"
+                            value={Contact}
+                            onChange={(e)=>setContact(e.target.value)}/>
+                        </div>
+                         
+                     </div>:null}
                      {/* <div className="p-2 w-50 bd-highlight">
                          <img width="250px" height="250px"
                          src={PhotoPath+PhotoFileName}/>
@@ -305,14 +307,14 @@ export default function Students(props){
                      </div> */}
                     </div>
                                 
-                    {StudentID==0?
+                    {UserID==0?
                         <button type="button"
                         className="btn btn-primary float-start"
                         onClick={()=>createClick()}
                         >Create</button>
                         :null}
 
-                        {StudentID!=0?
+                        {UserID!=0?
                         <button type="button"
                         className="btn btn-primary float-start"
                         onClick={()=>updateClick()}
@@ -327,11 +329,11 @@ export default function Students(props){
     )
 }
 
-{/*export default function Student() {
+{/*export default function User() {
     return (
         <div style={{margin:"3rem 3rem 3rem 100px"}}>
             <div className="Head pb-3">
-                <span className="h1">Student</span>
+                <span className="h1">User</span>
             </div>
 
 

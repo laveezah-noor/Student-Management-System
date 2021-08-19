@@ -6,6 +6,9 @@ export default function Instructor (props){
     const [instructorList, setInstructorList] = useState([]);
     const [ModalTitle, setModalTitle] = useState('');
     const [InstructorID, setInstructorID] = useState(0);
+    const [UserName, setUserName] = useState('');
+    const [UserPassword, setUserPassword] = useState('');
+    const [Role, setRole] = useState('');
     const [FirstName, setFirstName] = useState('');
     const [LastName, setLastName] = useState('');
     const [Contact, setContact] = useState('');
@@ -16,9 +19,13 @@ export default function Instructor (props){
           .get(`http://localhost:4000/instructor`)
           .then((response) => response.data)
           .then((response) => setInstructorList(response));
+          
     };
     const addClick = () =>{
         setModalTitle("Add Instructor")
+        setUserName('');
+        setUserPassword('');
+        setRole(2);
         setFirstName('');
         setLastName('');
         setContact('');
@@ -53,7 +60,10 @@ export default function Instructor (props){
 
         if(window.confirm('Are you sure?')){
             axios
-              .post(`http://localhost:4000/addInstructor`, {
+              .post(`http://localhost:4000/addUser`, {
+                UserName,
+                UserPassword,
+                Role,
                 FirstName,
                 LastName,
                 Contact,
@@ -160,7 +170,7 @@ export default function Instructor (props){
             <tbody>
                 {instructorList.map(instructor=>
                     <tr key={instructor.ID}>
-                        <td>{instructor.ID}</td>
+                        <td>{instructor.RoleID}{instructor.ID}</td>
                         <td>{instructor.FirstName} {instructor.LastName}</td>
                         <td>{instructor.Contact}</td>
                         <td>{instructor.Email}</td>
@@ -221,7 +231,7 @@ export default function Instructor (props){
 
                         <div className="input-group mb-3">
                             <span className="input-group-text">Email</span>
-                            <input type="text" className="form-control"
+                            <input type="email" className="form-control"
                             value={Email}
                             onChange={(e)=>setEmail(e.target.value)}/>
                         </div>
@@ -232,7 +242,35 @@ export default function Instructor (props){
                             value={Contact}
                             onChange={(e)=>setContact(e.target.value)}/>
                         </div>
-                                
+                        {InstructorID==0?
+                        <div>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text">User Name</span>
+                            <input type="text" className="form-control"
+                            value={UserName}
+                            onChange={(e)=>setUserName(e.target.value)}/>
+                        </div>
+
+                        <div className="input-group mb-3">
+                            <span className="input-group-text">Password</span>
+                            <input type="password" className="form-control"
+                            value={UserPassword}
+                            onChange={(e)=>setUserPassword(e.target.value)}/>
+                        </div>
+                        {/* <div className="input-group mb-3">
+                            <span className="input-group-text">Role</span>
+                            <select className="form-select"
+                            onChange={(e)=>{setRole(e.target.value);console.log(Role)}}
+                            value={Role}>
+                                <option value="">Select Role</option>
+                                {RoleList.map(role=><option key={role.RoleID} value={role.RoleID}>
+                                    {role.Role}
+                                </option>)}
+                            </select>
+                        </div> */}
+                        </div>
+                        :null}      
+                        
                                 
                      </div>
                      {/* <div className="p-2 w-50 bd-highlight">
