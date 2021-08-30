@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import $ from 'jquery';
 
-export default function Classroom(props) {
+export default function Classrrom(props) {
     const [Course,setCourse] = useState([]);
     const [Student,setStudent] = useState([]);
     const [LectureList,setLectureList] = useState([]);
@@ -39,10 +39,6 @@ export default function Classroom(props) {
         NewArr[e].status = true;
         setNavList(NewArr)
     }
-    const fileUpload = e =>{
-        setFile(e.target.files[0]);
-        console.log(e.target.files[0], 'File==>',File);
-    }
     const [CourseID,setCourseID] = useState(0);
     const [InstructorID,setInstructorID] = useState(0);
     const [title,setTitle] = useState('Course Name');
@@ -55,16 +51,18 @@ export default function Classroom(props) {
           .then((response) => {
               console.log(response);
               setCourse(response[0]);
-              setCourseID(response[0].ID);
-              setInstructorID(response[0].InstructorID)
-              setTitle(response[0].CourseName);
-              setInstructor(response[0].InstructorName);
               setStudent(response[2]);
               setTotalStudent(response[3][0]['Total'])
-              setLectureList(response[5])
-            //   console.log(response);
-              console.log(Course,Student,TotalStudent,LectureList,CourseID,instructor) 
+              setLectureList(response[5])  
             });
+            Course.map(item=>{
+                console.log(item)
+                setCourseID(item.ID);
+                setInstructorID(item.InstructorID)
+                setTitle(item.CourseName);
+                setInstructor(item.InstructorName)
+
+            })
 
     }
 
@@ -74,7 +72,7 @@ export default function Classroom(props) {
         setNotes('');
         setVideo('');
         setFile('');
-        setLectureID(0)
+    
     };
     const editClick = (Lecture) =>{
         setModalTitle("Edit Lecture")
@@ -101,12 +99,7 @@ export default function Classroom(props) {
             }
     };
     const createClick = () =>{
-        console.log(Description,
-            Notes,
-            Video,
-            File,
-            InstructorID,
-            CourseID);
+
         if(window.confirm('Are you sure?')){
             axios
               .post(`http://localhost:4000/addLecture`, {
@@ -183,13 +176,8 @@ export default function Classroom(props) {
           <div class="card-body">
             {NavList[0].status?
             <div>
-                <button 
-                onClick={()=>addClick()}
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-                className="btn btn-light">
+                <button className="btn btn-light">
                 <i className="fa fa-plus"></i>
-                &nbsp;&nbsp;Add New Lecture
                 </button>
                 {LectureList.map(item=>{
                 return(
@@ -291,7 +279,7 @@ export default function Classroom(props) {
                             <span className="input-group-text">File</span>
                             <input type="file" className="form-control"
                             value={File}
-                            onChange={(e)=>fileUpload(e)}/>
+                            onChange={(e)=>setFile(e.target.value)}/>
                         </div>
                                 
                      </div>
@@ -309,7 +297,7 @@ export default function Classroom(props) {
                         >Create</button>
                         :null}
 
-                    {LectureID!==0?
+                        {LectureID!==0?
                         <button type="button"
                         className="btn btn-primary float-start"
                         onClick={()=>updateClick()}

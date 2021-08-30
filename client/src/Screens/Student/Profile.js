@@ -1,48 +1,24 @@
 import React, {useEffect, useState} from 'react'
-import { useLocation, useParams } from 'react-router-dom';
-import axios from 'axios';
 
-export default function Profile(props) {
-    const {state} = useLocation();
-    const user = parseInt(state.id);
-    const role = parseInt(state.role)
+export default function Profile() {
+    const [UserID,setUserID] = useState(null)
     const [UserName,setUserName] = useState('');
     const [UserPassword,setUserPassword] = useState('');
     const [FirstName,setFirstName] = useState('');
     const [LastName,setLastName] = useState('');
     const [Email,setEmail] = useState('');
     const [Contact,setContact] = useState('');
-    const Role = (role==1)? 'Student': (role==2)? 'Instructor' : (role==3)? 'Admin': null 
-    const getData = () =>{
-        axios
-        .get(`http://localhost:4000/profile/${role}/${user}`)
-        .then((response) => response.data)
-        .then((response) => {
-          console.log(response[0]);
-          setFirstName(response[0][0].FirstName)
-          setLastName(response[0][0].LastName)
-          setEmail(response[0][0].Email)
-          setContact(response[0][0].Contact)
-          setUserName(response[0][0].UserName)
-          setUserPassword(response[0][0].UserPassword)
-        })
-    };
+    const [Role,setRole] = useState('');
     const updateClick = () =>{
 
     }
-    
-    useEffect(() => {
-        getData();
-        console.log(user,role)
-    }, [props]);
-    
     return (
         <div 
-        className="d-flex justify-content-around my-5"
+        className="d-flex justify-content-around"
         >
             <div className="card w-50 p-2 m-2">
                 <div className="card-header mt-2 mb-2 d-flex justify-content-between">
-                <h5 className="modal-title">My Profile</h5>
+                <h5 className="modal-title">Update Profile</h5>
                 </div>
                 <div className="card-body">
                     <div className="d-flex flex-row bd-highlight mb-3">
@@ -91,7 +67,7 @@ export default function Profile(props) {
                            </div>
                            <div className="input-group mb-3">
                                <span className="input-group-text">Role</span>
-                               <input type="text" className="form-control"
+                               <input type="password" className="form-control"
                                value={Role} disabled
                                />
                            </div>
@@ -106,18 +82,11 @@ export default function Profile(props) {
                             <input className="m-2" type="file" onChange={this.imageUpload}/>
                         </div> */}
                         </div>
-                        <div className="d-flex justify-content-around">
                         <button type="button"
                         className="btn btn-primary float-start"
                         onClick={()=>updateClick()}
                         >Update</button>
-                        <button type="button"
-                        className="btn btn-danger float-start"
-                        onClick={()=>updateClick()}
-                        >Logout</button>
                            
-                        </div>
-                        
 
                 </div>
             </div>
@@ -131,10 +100,10 @@ export default function Profile(props) {
                 />
             </div>
             <div className="card-body">
-                <h5 class="card-title h2">{FirstName} {LastName}</h5>
-                <p className="card-text h5">{UserName}</p>
-                <p className="card-text h5">{Email}</p>
-                <p className="card-text h5">{Role}</p>
+                <h5 class="card-title h2">Name</h5>
+                <p className="card-text h5">UserName</p>
+                <p className="card-text h5">UserEmail</p>
+                <p className="card-text h5">Role</p>
 
             </div>
 

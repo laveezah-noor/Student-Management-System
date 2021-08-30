@@ -1,25 +1,25 @@
-import React, {useEffect,useState} from 'react'
-import Card from '../Components/Card'
-import axios from 'axios'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom';
 
-export default function Courses(props) {
-    const [CourseList, setCourseList] = useState([]);
-    
+export default function Notifications(props) {
+    const [DataList, setDataList] = useState([]);
+    const {state} = useLocation();
+    const ID = parseInt(state.id);
     const getDataList = () => {
         axios
-          .get(`http://localhost:4000/course`)
+          .get(`http://localhost:4000/notification/1/${ID}`)
           .then((response) => response.data)
-          .then((response) => setCourseList(response));
-        
+          .then((response) =>setDataList(response));        
     };
 
     useEffect(() => {
         getDataList();
     }, [props]);
-    console.log(CourseList);
+    console.log(DataList, state, ID); 
     return (
         <div style={{margin:"3rem 3rem 3rem 100px"}}>
-            <h3 className="mt-3 mb-2 mx-5">All Courses</h3>
+            <h3 className="mt-3 mb-2 mx-5">Notification</h3>
             <div className="d-flex flex-row mx-5">
                     <input className="form-control m-2"
                     // onChange={this.changeDepartmentIdFilter}
@@ -62,34 +62,23 @@ export default function Courses(props) {
                             <hr/>
                 <div className="row m-4">
                     {/* List */}
-                    {CourseList.map(item=>{
+                    <ul class="list-group list-group-flush">
+                    {DataList.map(item=>{
                         console.log(item);
                         return(
-                        <Card
-                        key={item.ID}
-                        CourseID={item.ID}
-                        CourseName={item.CourseName}
-                        CourseDetail={''}
-                        InstructorName={item.InstructorName}
-                        onClick={()=>{window.location.pathname = `/classroom/${item.ID}`}}
-                        />)}
+                            <li key={item.ID} className="border-bottom p-2 d-flex justify-content-between align-items-start">
+                              <div class="ms-2 me-auto">
+                                {/* <div class="fw-bold">Subheading</div> */}
+                                {item.Message}
+                              </div>
+                              {/* <span class="badge bg-primary rounded-pill">14</span> */}
+                            </li>
+                            
                         )}
+                    )}
+                    </ul>
                     
                 </div>
             </div>
-    //     </div>
-    // </div>
     )
 }
-
-// import React, { Component } from 'react'
-
-// export default class Courses extends Component {
-//     render() {
-//         return (
-//             <div>
-//             Hi Coursees                
-//             </div>
-//         )
-//     }
-// }

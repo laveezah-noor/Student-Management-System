@@ -39,10 +39,6 @@ export default function Classroom(props) {
         NewArr[e].status = true;
         setNavList(NewArr)
     }
-    const fileUpload = e =>{
-        setFile(e.target.files[0]);
-        console.log(e.target.files[0], 'File==>',File);
-    }
     const [CourseID,setCourseID] = useState(0);
     const [InstructorID,setInstructorID] = useState(0);
     const [title,setTitle] = useState('Course Name');
@@ -53,28 +49,34 @@ export default function Classroom(props) {
           .get(`http://localhost:4000/classroom/${props.match.params.courseid}`)
           .then((response) => response.data)
           .then((response) => {
-              console.log(response);
-              setCourse(response[0]);
-              setCourseID(response[0].ID);
-              setInstructorID(response[0].InstructorID)
-              setTitle(response[0].CourseName);
-              setInstructor(response[0].InstructorName);
-              setStudent(response[2]);
-              setTotalStudent(response[3][0]['Total'])
-              setLectureList(response[5])
-            //   console.log(response);
-              console.log(Course,Student,TotalStudent,LectureList,CourseID,instructor) 
+            UpdateData(response)
+            console.log(response);
             });
+        
+    }
+    const UpdateData=(res)=>{
+        setCourse(res[0]);
+        setStudent(res[2]);
+        setTotalStudent(res[3][0]['Total'])
+        setLectureList(res[5])
+        console.log(Course,Student,TotalStudent,LectureList) 
+      
+        Course.map(item=>{
+            console.log(item)
+            setCourseID(item.ID);
+            setInstructorID(item.InstructorID)
+            setTitle(item.CourseName);
+            setInstructor(item.InstructorName)
+    })
 
     }
-
     const addClick = () =>{
         setModalTitle("Add Lecture")
         setDescription('');
         setNotes('');
         setVideo('');
         setFile('');
-        setLectureID(0)
+    
     };
     const editClick = (Lecture) =>{
         setModalTitle("Edit Lecture")
@@ -101,12 +103,7 @@ export default function Classroom(props) {
             }
     };
     const createClick = () =>{
-        console.log(Description,
-            Notes,
-            Video,
-            File,
-            InstructorID,
-            CourseID);
+
         if(window.confirm('Are you sure?')){
             axios
               .post(`http://localhost:4000/addLecture`, {
@@ -183,14 +180,6 @@ export default function Classroom(props) {
           <div class="card-body">
             {NavList[0].status?
             <div>
-                <button 
-                onClick={()=>addClick()}
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-                className="btn btn-light">
-                <i className="fa fa-plus"></i>
-                &nbsp;&nbsp;Add New Lecture
-                </button>
                 {LectureList.map(item=>{
                 return(
                 <div className="card" key={item.ID}>
@@ -200,18 +189,6 @@ export default function Classroom(props) {
                     <p className="card-text text-left text-secondary" style={{fontSize:15}}>{item.SubmitTime}</p>
                     </div>
                     
-           
-                    <div class="dropdown">
-                      <button class="btn btn-light dropdown" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i className="fa fa-ellipsis-v"></i>
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li onClick={()=>editClick(item)} data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"><a class="dropdown-item" href="#">Edit</a></li>
-                        <li onClick={()=>deleteClick(item.ID)} data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"><a class="dropdown-item" href="#">Delete</a></li>
-                      </ul>
-                    </div>
                 </div>
                 <div className="card-body">
                     <p class="card-title text-left text-bold h4 mb-3 mx-2">{item.Description}</p>
@@ -291,7 +268,7 @@ export default function Classroom(props) {
                             <span className="input-group-text">File</span>
                             <input type="file" className="form-control"
                             value={File}
-                            onChange={(e)=>fileUpload(e)}/>
+                            onChange={(e)=>setFile(e.target.value)}/>
                         </div>
                                 
                      </div>
@@ -309,7 +286,7 @@ export default function Classroom(props) {
                         >Create</button>
                         :null}
 
-                    {LectureID!==0?
+                        {LectureID!==0?
                         <button type="button"
                         className="btn btn-primary float-start"
                         onClick={()=>updateClick()}
