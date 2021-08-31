@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(upload())
 app.use(cors({
   origin: ['http://localhost:3000'],
-  methods: ["GET","POST","DELETE"],
+  methods: ["GET","POST","DELETE","PUT"],
   credentials: true
 }));
 // app.use(cors());
@@ -123,9 +123,24 @@ app.get('/profile/:role/:id', (req, res) => {
   });
 });
 
-app.post('/updateProfile', (req, res) => {
+app.put('/updateProfile', (req, res) => {
+  console.log("result: ",req.body.UserID,
+  req.body.RoleID,
+  req.body.UserName,
+  req.body.UserPassword,
+  req.body.FirstName,
+  req.body.LastName,
+  req.body.Email,
+  req.body.Contact)
   const SELECT_ALL_TASKS = `
-  CALL ProfileData(${role},${id});
+	START TRANSACTION;
+		UPDATE USERS SET 
+		UserName = '${req.body.UserName}',
+		UserPassword = '${req.body.UserPassword}'
+		WHERE UserID = ${req.body.UserID} AND RoleID = ${req.body.RoleID};
+		CALL UpdateProfile('${req.body.RoleID}', '${req.body.UserID}', '${req.body.FirstName}', 
+      '${req.body.LastName}', '${req.body.Email}', '${req.body.Contact}');
+	COMMIT;
   `;
   connection.query(SELECT_ALL_TASKS, (err, result) => {
     if (err) {
@@ -147,6 +162,7 @@ app.get('/dashboard/:role/:id', (req, res) => {
   CALL DashboardData(${role},${id});
 
   `;
+  console.log(SELECT_ALL_TASKS)
   // const SELECT_ALL_TASKS = `
   // SELECT 'Courses' AS label, COUNT(*) AS value FROM COURSE
   // UNION 
@@ -180,43 +196,40 @@ app.get('/classroom/:courseid', (req, res) => {
   });
 });
 
-app.post('/addLecture', (req, res) => {
-  if (req.body.File) {
-    console.log(req.body.File)
-    var file = req.body.File
-    var filename = file.name
-    console.log(filename)
-    const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, Video, Notes, File, InstructorID, SubmitTime)
-    VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.Video}','${req.body.Notes}','${filename}',${req.body.InstructorID},NOW());`;
-    console.log(ADD_TASK, `add lecture`);    
-    file.mv('client/public/LectureFiles'+filename, function (err){
-      if(err){
-        res.send(err)
-      } else {
-        res.send('File Uploaded')
-      }
-    })
-  } else {
-    const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, Video, Notes, InstructorID, SubmitTime)
-    VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.Video}','${req.body.Notes}',${req.body.InstructorID},NOW());`;
-    console.log(ADD_TASK, `add lecture`);
-  }
-  connection.query(ADD_TASK, (err) => {
+app.delete('/leavecourse/:id', (req, res) => {
+  const DELETE_TASK = `DELETE FROM COURSE_STUDENT WHERE StudentIDv= ${req.params.id};`;
+  connection.query(DELETE_TASK, (err, result) => {
     if (err) {
       console.log(err);
     } else {
-      res.send('added');
+      res.send('Left');
     }
   });
 });
 
-app.post('/upload',(req,res)=>{
-  if (req.files) {
-    console.log(req.files)
-    var file = req.files.file
+app.post('/addLecture', (req, res) => {
+  console.log("File: ",req.body.File)
+    const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, Video, File, Notes, InstructorID, SubmitTime)
+    VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.Video}','${req.body.File}','${req.body.Notes}',${req.body.InstructorID},NOW());`;
+    console.log(ADD_TASK, `add lecture`);
+  // }
+  connection.query(ADD_TASK, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Lecture Added");
+    }
+  });
+});
+
+app.post('/upload/:File',(req,res)=>{
+  if (req.params.File) {
+    console.log(req.params.File)
+    var file = req.params.File
     var filename = file.name
+    // var filename = req.params.File
     console.log(filename)
-    file.mv('./uploads'+filename, function (err){
+    file.mv('client/public/LectureFiles'+filename, function (err){
       if(err){
         res.send(err)
       } else {
@@ -226,6 +239,18 @@ app.post('/upload',(req,res)=>{
     })
   }
 })
+
+app.delete('/deleteLecture/:id', (req, res) => {
+  const DELETE_TASK = `
+  DELETE FROM LECTURE WHERE ID = ${req.params.id};`;
+  connection.query(DELETE_TASK, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send('deleted');
+    }
+  });
+});
 
 app.post('/joinCourse', (req, res) => {
   const ADD_TASK = `Call JoinCourse(${req.body.CourseID},${req.body.StudentID});`;
@@ -346,15 +371,35 @@ app.get('/courseTrainer/:id', (req, res) => {
 });
 
 app.get('/totalStudent/:CourseID', (req, res) => {
-  const SELECT_ALL_TASKS = `
-  SELECT Count(*) as Total FROM COURSE_STUDENT WHERE CourseID = ${req.params.CourseID};`;
+  if (req.query.id) {
+    const SELECT_ALL_TASKS = `
+  SELECT Count(*) as Total FROM COURSE_STUDENT WHERE CourseID = ${req.params.CourseID};
+  SELECT IF( EXISTS(
+    Select * FROM COURSE_STUDENT WHERE CourseID = ${req.params.CourseID} AND StudentID = ${req.query.id})
+    , 1, 0) AS Status;
+  `;
   connection.query(SELECT_ALL_TASKS, (err, result) => {
     if (err) {
       console.log(err);
     } else {
+      console.log(result)
       res.send(result);
     }
   });
+  } else {
+  const SELECT_ALL_TASKS = `
+  SELECT Count(*) as Total FROM COURSE_STUDENT WHERE CourseID = ${req.params.CourseID};
+  `;
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result)
+      res.send(result);
+    }
+  });
+  }
+  
 });
 
 

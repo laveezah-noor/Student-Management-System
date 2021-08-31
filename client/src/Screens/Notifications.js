@@ -5,10 +5,11 @@ import { useLocation } from 'react-router-dom';
 export default function Notifications(props) {
     const [DataList, setDataList] = useState([]);
     const {state} = useLocation();
-    const ID = parseInt(state.id);
+    const ID = parseInt(state.id || props.match.params.user);
+    const Role = parseInt(state.role || props.match.params.role)
     const getDataList = () => {
         axios
-          .get(`http://localhost:4000/notification/1/${ID}`)
+          .get(`http://localhost:4000/notification/${Role}/${ID}`)
           .then((response) => response.data)
           .then((response) =>setDataList(response));        
     };

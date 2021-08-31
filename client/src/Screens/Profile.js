@@ -4,18 +4,18 @@ import axios from 'axios';
 
 export default function Profile(props) {
     const {state} = useLocation();
-    const user = parseInt(state.id);
-    const role = parseInt(state.role)
+    const UserID = parseInt(state.id);
+    const RoleID = parseInt(state.role)
     const [UserName,setUserName] = useState('');
     const [UserPassword,setUserPassword] = useState('');
     const [FirstName,setFirstName] = useState('');
     const [LastName,setLastName] = useState('');
     const [Email,setEmail] = useState('');
     const [Contact,setContact] = useState('');
-    const Role = (role==1)? 'Student': (role==2)? 'Instructor' : (role==3)? 'Admin': null 
+    const Role = (RoleID==1)? 'Student': (RoleID==2)? 'Instructor' : (RoleID==3)? 'Admin': null 
     const getData = () =>{
         axios
-        .get(`http://localhost:4000/profile/${role}/${user}`)
+        .get(`http://localhost:4000/profile/${RoleID}/${UserID}`)
         .then((response) => response.data)
         .then((response) => {
           console.log(response[0]);
@@ -28,12 +28,41 @@ export default function Profile(props) {
         })
     };
     const updateClick = () =>{
-
+        console.log(UserID,
+            RoleID,
+            UserName,
+            UserPassword,
+            FirstName,
+            LastName,
+            Email,
+            Contact);
+        if(window.confirm('Are you sure?')){
+            axios
+              .put(`http://localhost:4000/updateProfile`, {
+                UserID,
+                RoleID,
+                UserName,
+                UserPassword,
+                FirstName,
+                LastName,
+                Email,
+                Contact
+              })
+              .then((result) => {
+                console.log(result);
+                getData();
+            } // fetching the updated list
+                ,(error)=>{
+                alert('Failed');
+            })
+        };
     }
-    
+    const LogoutClick = () =>{
+        window.location.pathname = ''
+    }   
     useEffect(() => {
         getData();
-        console.log(user,role)
+        console.log(UserID,RoleID)
     }, [props]);
     
     return (
@@ -113,7 +142,7 @@ export default function Profile(props) {
                         >Update</button>
                         <button type="button"
                         className="btn btn-danger float-start"
-                        onClick={()=>updateClick()}
+                        onClick={()=>LogoutClick()}
                         >Logout</button>
                            
                         </div>

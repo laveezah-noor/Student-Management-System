@@ -7,13 +7,6 @@ export default function Classroom(props) {
     const [Student,setStudent] = useState([]);
     const [LectureList,setLectureList] = useState([]);
     const [TotalStudent,setTotalStudent] = useState('');
-    const [ModalTitle, setModalTitle] = useState('');
-    const [LectureID, setLectureID] = useState(0);
-    const [Description, setDescription] = useState('');
-    const [Notes, setNotes] = useState('');
-    const [Video, setVideo] = useState('');
-    const [File, setFile] = useState('');
-    
     const [NavList, setNavList] = useState([
         {
             Id:0,
@@ -25,11 +18,12 @@ export default function Classroom(props) {
             title: 'People',
             status: false,
         },
-        {
-            Id:2,
-            title: 'Material',
-            status: false,
-        }
+
+        // {
+        //     Id:2,
+        //     title: 'Material',
+        //     status: false,
+        // }
     ]);
 
     const onChange = (e) =>{
@@ -49,104 +43,65 @@ export default function Classroom(props) {
           .get(`http://localhost:4000/classroom/${props.match.params.courseid}`)
           .then((response) => response.data)
           .then((response) => {
-            UpdateData(response)
+            setCourse(response[0]);
+            setStudent(response[2]);
+            setTotalStudent(response[3][0]['Total'])
+            setLectureList(response[5])
+            console.log(Course,Student,TotalStudent,LectureList)
+            if(response[0][0]!=undefined){
+                setCourseID(response[0][0].ID);
+                setInstructorID(response[0][0].InstructorID)
+                setTitle(response[0][0].CourseName);
+                setInstructor(response[0][0].InstructorName)
+            }
             console.log(response);
             });
         
     }
-    const UpdateData=(res)=>{
-        setCourse(res[0]);
-        setStudent(res[2]);
-        setTotalStudent(res[3][0]['Total'])
-        setLectureList(res[5])
-        console.log(Course,Student,TotalStudent,LectureList) 
-      
-        Course.map(item=>{
-            console.log(item)
-            setCourseID(item.ID);
-            setInstructorID(item.InstructorID)
-            setTitle(item.CourseName);
-            setInstructor(item.InstructorName)
-    })
-
+    const Leave = () =>{
+        axios
+        .delete(`http://localhost:4000/leavecourse/${props.match.params.user}`)
+        .then((response) => response.data)
+          .then((response) => {
+              console.log(response)
+                window.location.pathname=`/Student/${props.match.params.user}/${props.match.params.role}`
+          });
     }
-    const addClick = () =>{
-        setModalTitle("Add Lecture")
-        setDescription('');
-        setNotes('');
-        setVideo('');
-        setFile('');
-    
-    };
-    const editClick = (Lecture) =>{
-        setModalTitle("Edit Lecture")
-        setDescription(Lecture.Description);
-        setNotes(Lecture.Notes);
-        setVideo(Lecture.Video);
-        setFile(Lecture.File);
-        setLectureID(Lecture.ID)
-    };
-    const deleteClick = (InstructorID) =>{
-
-        if(window.confirm('Are you sure?')){
-            axios
-              .delete(`http://localhost:4000/instructor/${InstructorID}`, {
-                method: 'DELETE',
-              })
-              .then((result) => {
-                console.log(result);
-                getDataList();
-            } // fetching the updated list
-                ,(error)=>{
-                alert('Failed');
-            })
-            }
-    };
-    const createClick = () =>{
-
-        if(window.confirm('Are you sure?')){
-            axios
-              .post(`http://localhost:4000/addLecture`, {
-                Description,
-                Notes,
-                Video,
-                File,
-                InstructorID,
-                CourseID
-              })
-              .then((result) => {
-                console.log(result);
-                getDataList();
-            } // fetching the updated list
-                ,(error)=>{
-                alert('Failed');
-            })
-            }
-            $('#exampleModal .btn-close').click()
-    };
-    const updateClick = () =>{
-
-        if(window.confirm('Are you sure?')){
-            axios
-              .put(`http://localhost:4000/updateLecture`, {
-                LectureID,
-                Description,
-                Notes,
-                Video,
-                File
-              })
-              .then((result) => {
-                console.log(result);
-                getDataList();
-            } // fetching the updated list
-                ,(error)=>{
-                alert('Failed');
-            })
-            }
-            $('#exampleModal .btn-close').click()
-    };
-
-    
+    const Lectures = () =>{
+        if(LectureList!=[]){
+            return(
+                LectureList.map(item=>{
+                    console.log(LectureList)
+                    return(
+                    <div className="card" key={item.ID}>
+                    <div className="card-header mt-2 mb-2 d-flex justify-content-between">
+                        <div>
+                        <h5 class="card-title text-left text-bold">{item.InstructorName}</h5>
+                        <p className="card-text text-left text-secondary" style={{fontSize:15}}>{item.SubmitTime}</p>
+                        </div>
+                        
+                    </div>
+                    <div className="card-body">
+                        <p class="card-title text-left text-bold h4 mb-3 mx-2">{item.Description}</p>
+                        {item.Notes!=null?<p class="card-title text-left">{item.Notes}</p>:null}
+                        {item.Video!=null?
+                            <iframe width="560" height="315" src={item.Video}>
+                            </iframe>:null
+                        }
+                        {item.File!=null?
+                        <div className="card w-50">
+                            <div className="card-body">
+                            <h5 class="card-title text-left text-bold">{title}</h5>
+                            </div>
+                        </div>
+                        :null}
+                    </div>
+                </div>
+                    )})
+            )
+        }
+    }
+    console.log(props.match.params.user);    
     useEffect(() => {
         getDataList()
     }, [props]);
@@ -154,17 +109,25 @@ export default function Classroom(props) {
         <div>
             <div className="card w-75 p-2 m-2" style={{height:"30vh"}}>
             <img className="card-img-top h-100" style={{backgroundSize:"cover"}} src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGxlYXJuaW5nfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
-            <div className="card-img-overlay">
+            <div className="card-img-overlay d-flex justify-content-between">
+                <div>
                 <h5 class="card-title h1 text-left text-light">{title}</h5>
                 <p className="card-text h3 text-left text-light">{instructor}</p>
+                </div>
+                <div className="d-flex flex-row-reverse">
+
+            <div class="dropdown">
+                      <button class="btn btn-light dropdown" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMen uButton1">
+                        <li 
+                        onClick={()=>Leave()}
+                        ><a class="dropdown-item" href="#">Leave</a></li>
+                        </ul>
             </div>
-            <div className="card-body">
-                {/* <h5 class="card-title">{title}</h5>
-                <p className="card-text">{instructor}</p> */}
+                </div>
             </div>
-            {/* <div className="card-footer">
-                Hello
-            </div> */}
         </div>
         <div class="card text-center w-75 p-2 m-2">
           <div class="card-header">
@@ -179,8 +142,11 @@ export default function Classroom(props) {
           </div>
           <div class="card-body">
             {NavList[0].status?
+            // Lectures
             <div>
-                {LectureList.map(item=>{
+                <Lectures/>
+                {/* {LectureList!=[]?LectureList.map(item=>{
+                console.log(LectureList)
                 return(
                 <div className="card" key={item.ID}>
                 <div className="card-header mt-2 mb-2 d-flex justify-content-between">
@@ -206,11 +172,15 @@ export default function Classroom(props) {
                     :null}
                 </div>
             </div>
-                )})}
+                )}):
+                <div>
+                <h3>No Lectures</h3>
+                </div>} */}
             </div>
             :null}
             
             {NavList[1].status?
+            // People
             <div className="text-left">
                 <div className="d-flex m-3 p-2 justify-content-between border-bottom">
                 <h4 class="card-title text-left text-bold">Classmates</h4>
@@ -226,77 +196,6 @@ export default function Classroom(props) {
           
         </div>
         </div>
-        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog modal-lg modal-dialog-centered">
-                <div className="modal-content">
-                   <div className="modal-header">
-                       <h5 className="modal-title">{ModalTitle}</h5>
-                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                       ></button>
-                   </div>
-
-                   <div className="modal-body">
-                    <div className="d-flex flex-row bd-highlight mb-3">
-
-                     <div className="p-2 w-50 bd-highlight">
-
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">Lecture Title</span>
-                            <input type="text" className="form-control"
-                            value={Description}
-                            onChange={(e)=>setDescription(e.target.value)}/>
-                        </div>
-
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">Content</span>
-                            <textarea class="form-control" aria-label="With textarea"
-                            value={Notes}
-                            onChange={(e)=>setNotes(e.target.value)}></textarea>
-                            {/* <input type="text" className="form-control"
-                            value={Notes}
-                            onChange={(e)=>setNotes(e.target.value)}/> */}
-                        </div>
-
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">Embed Video</span>
-                            <input type="text" className="form-control"
-                            value={Video}
-                            onChange={(e)=>setVideo(e.target.value)}/>
-                        </div>
-                                
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">File</span>
-                            <input type="file" className="form-control"
-                            value={File}
-                            onChange={(e)=>setFile(e.target.value)}/>
-                        </div>
-                                
-                     </div>
-                     {/* <div className="p-2 w-50 bd-highlight">
-                         <img width="250px" height="250px"
-                         src={PhotoPath+PhotoFileName}/>
-                         <input className="m-2" type="file" onChange={this.imageUpload}/>
-                     </div> */}
-                    </div>
-                                
-                    {LectureID===0?
-                        <button type="button"
-                        className="btn btn-primary float-start"
-                        onClick={()=>createClick()}
-                        >Create</button>
-                        :null}
-
-                        {LectureID!==0?
-                        <button type="button"
-                        className="btn btn-primary float-start"
-                        onClick={()=>updateClick()}
-                        >Update</button>
-                        :null}
-                   </div>
-                        
-                        </div>
-                </div>
-            </div>
-        </div>
+    </div>
     )
 }

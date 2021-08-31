@@ -32,7 +32,7 @@ export default function Dashboard(props) {
                 setData(response[1]);
                 setFirstName(response[0][0].FirstName)
                 setLastName(response[0][0].LastName)
-                setI_Students(response[1][0]['TotalStudents'])
+                setI_Students(response[2][0]['TotalStudents'])
 
               } else if (role==3) {
                 setData(response[1]);
@@ -104,12 +104,30 @@ export default function Dashboard(props) {
             </div>
             :null}
             {role==2?
-            <div className="d-flex">
+            <div className="row">
+            <div className=" row m-2">
+            <h2 className="h3 m-2 mb-4 text-left">Overview</h2>
             <OverviewCard 
               title={'Total Students'}
               icon={"fa-book"}
               value={I_Students}
                 />
+            </div>
+            <div className=" row m-2">
+            <h2 className="h3 m-2 mb-4 text-left">My Courses</h2>
+            {data.map(item=>
+            {return(
+                <Card 
+              key={item.ID}
+              CourseID={item.ID}
+              CourseName={item.CourseName}
+              CourseDetail={''}
+              InstructorName={item.InstructorName}
+              onClick = {()=>history.push(`${url}/MyClassroom/${item.ID}`)}
+                />
+            )})}
+            
+            </div>
             </div>
             
             :null}

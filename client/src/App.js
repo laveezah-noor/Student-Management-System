@@ -57,7 +57,7 @@ function App() {
       <Route exact path={'/'} component={Home}/>
       <Route path={`/courses`} component={Course} />
       <Route path={`/trainer`} component={Instructor} />
-      <Route path={'/Student/:user/:role'} component={Student} user={user} role={role}/>
+      <Route path={'/Home/:user/:role'} component={Student} user={user} role={role}/>
       <Route path={'/login'} component={Login} login={()=>getLogin()}/>
       <Route path={'/register'} component={Register} />
       
@@ -98,6 +98,7 @@ const Student = (props) => {
       <Switch>
       <Route exact path={`${path}`} component={Dashboard} />
       <Route exact path={`${path}/myStudents`} component={MyStudents} />
+      <Route exact path={`${path}/Notification`} component={Notifications} />
       <Route exact path={`${path}/MyClassroom/:courseid`} component={MyClassroom} />
       <Route exact path={`${path}/myProfile`} component={Profile} />
       </Switch>

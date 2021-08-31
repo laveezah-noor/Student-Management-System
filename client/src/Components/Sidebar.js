@@ -72,10 +72,15 @@ export default function Sidebar(props) {
             icon: 'person-fill',
             link:'/myStudents'
         },
+        // {
+        //     title: 'My Classroom',
+        //     icon: 'book-fill',
+        //     link:`/MyClassroom/${course}`
+        // },
         {
-            title: 'My Classroom',
-            icon: 'book-fill',
-            link:`/MyClassroom/${course}`
+            title: 'Notifications',
+            icon: 'bell-fill',
+            link:'/Notification'
         },
         {
             title: 'My Profile',

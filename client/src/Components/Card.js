@@ -38,7 +38,7 @@ function Card(params) {
     .get(`http://localhost:4000/totalStudent/${CourseID}`)
     .then((response) => response.data)
     .then((response) => {
-      // console.log(response)
+      console.log(response)
       setTotalStudent(response[0]['Total'])});
     };
     useEffect(() => {
@@ -83,16 +83,20 @@ function StudentAllCard(params) {
   const InstructorName = params.InstructorName
   const CourseID = params.CourseID
   const StudentID = params.StudentID
-  const [TotalStudent,setTotalStudent] = useState(0)
+  const [TotalStudent,setTotalStudent] = useState(0);
+  const [Status,setStatus] = useState(0);
   const getData= () =>{
     axios
-  .get(`http://localhost:4000/totalStudent/${CourseID}`)
+  .get(`http://localhost:4000/totalStudent/${CourseID}?id=${StudentID}`)
   .then((response) => response.data)
   .then((response) => {
-    // console.log(response)
-    setTotalStudent(response[0]['Total'])});
+    setTotalStudent(response[0][0]['Total'])
+    setStatus(response[1][0]['Status'])
+    // console.log(response,TotalStudent,Status)
+    ;});
   };
   const joinCourse = () => {
+    if(Status==0){
     axios
     .post(`http://localhost:4000/joinCourse`,{
       CourseID,
@@ -100,14 +104,20 @@ function StudentAllCard(params) {
     })
     .then((result) => {
       console.log(result);
-      // getCourseList();
+      getData();
     } // fetching the updated list
       ,(error)=>{
       alert('Failed');
-  })
+      })
+    } else{
+      params.onClick()
+    } 
+  
   }
+  console.log(Status,TotalStudent);
   useEffect(() => {
     getData();
+
 }, [params]);
   return(
       <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
@@ -134,8 +144,9 @@ function StudentAllCard(params) {
               <i class="bx bx-heart"></i>&nbsp;42 */}
             </div>
           </div>
-          <button className="btn course-join d-flex align-items-center" onClick={()=>joinCourse()}>
-              <i className="fa fa-play-circle"></i>&nbsp;Join This Course
+          <button className={`${(Status==0)?"course-join":"course-joined"} btn d-flex align-items-center`}
+           onClick={()=>joinCourse()}>
+              <i className="fa fa-play-circle"></i>&nbsp;{(Status==0)?"Join This Course":"Already Joined"}
             </button>
         </div>
       </div>

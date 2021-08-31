@@ -1,5 +1,5 @@
 import React from 'react';
-import './StCard.css'
+import './Card.css'
 
 export default function StCard({title, icon, cls, value}) {
     return (

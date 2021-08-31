@@ -1,12 +1,14 @@
 import React, {useEffect,useState} from 'react'
 import {StudentAllCard} from '../Components/Card'
 import axios from 'axios'
-import { useLocation } from 'react-router-dom';
+import { Route, useLocation, useRouteMatch } from 'react-router-dom';
 
 export default function Courses(props) {
+    let { path, url } = useRouteMatch();
     const [CourseList, setCourseList] = useState([]);
     const {state} = useLocation();
-    const ID = parseInt(state.id);
+    const ID = parseInt(state.id || props.match.params.user);
+    const Role = parseInt(state.role || props.match.params.role)
     const [Filter,setFilter] = useState('Course Name')
     const FiltersList=[
         // {label: 'ID', value: 'ID'},
@@ -30,7 +32,7 @@ export default function Courses(props) {
           .then((response) => response.data)
           .then((response) => {
               console.log(response[0]);
-            setCourseList(response[0])
+              setCourseList(response[0])
             })
         } else{
             getDataList();
@@ -44,7 +46,7 @@ export default function Courses(props) {
           .then((response) => response.data)
           .then((response) => {
               console.log(response[0]);
-            setCourseList(response[0])
+              setCourseList(response[0])
           });
         } else {
             axios
@@ -52,7 +54,7 @@ export default function Courses(props) {
           .then((response) => response.data)
           .then((response) => {
               console.log(response[0]);
-            setCourseList(response[0])
+              setCourseList(response[0])
           });
         }
     }
@@ -60,7 +62,7 @@ export default function Courses(props) {
     useEffect(() => {
         getDataList();
     }, [props]);
-    console.log(CourseList, state, ID);
+    console.log(CourseList, state, props.match.params);
     return (
         <div style={{margin:"3rem 3rem 3rem 100px"}}>
             <h3 className="mt-3 mb-2 mx-5">All Courses</h3>
@@ -106,7 +108,7 @@ export default function Courses(props) {
                         CourseDetail={''}
                         InstructorName={item.InstructorName}
                         StudentID={ID}
-                        onClick={()=>{window.location.pathname = `/classroom/${item.ID}`}}
+                        onClick={()=>{window.location.pathname = `Home/${ID}/${Role}/classroom/${item.ID}`}}
                         />)}
                         )}
                     
