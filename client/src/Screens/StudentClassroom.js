@@ -64,7 +64,7 @@ export default function Classroom(props) {
         .then((response) => response.data)
           .then((response) => {
               console.log(response)
-                window.location.pathname=`/Student/${props.match.params.user}/${props.match.params.role}`
+                window.location.pathname=`/Home/${props.match.params.user}/${props.match.params.role}`
           });
     }
     const Lectures = () =>{
@@ -76,14 +76,14 @@ export default function Classroom(props) {
                     <div className="card" key={item.ID}>
                     <div className="card-header mt-2 mb-2 d-flex justify-content-between">
                         <div>
-                        <h5 class="card-title text-left text-bold">{item.InstructorName}</h5>
+                        <h5 className="card-title text-left text-bold">{item.InstructorName}</h5>
                         <p className="card-text text-left text-secondary" style={{fontSize:15}}>{item.SubmitTime}</p>
                         </div>
                         
                     </div>
                     <div className="card-body">
-                        <p class="card-title text-left text-bold h4 mb-3 mx-2">{item.Description}</p>
-                        {item.Notes!=null?<p class="card-title text-left">{item.Notes}</p>:null}
+                        <p className="card-title text-left text-bold h4 mb-3 mx-2">{item.Description}</p>
+                        {item.Notes!=null?<p className="card-title text-left">{item.Notes}</p>:null}
                         {item.Video!=null?
                             <iframe width="560" height="315" src={item.Video}>
                             </iframe>:null
@@ -91,7 +91,7 @@ export default function Classroom(props) {
                         {item.File!=null?
                         <div className="card w-50">
                             <div className="card-body">
-                            <h5 class="card-title text-left text-bold">{title}</h5>
+                            <h5 className="card-title text-left text-bold">{title}</h5>
                             </div>
                         </div>
                         :null}
@@ -111,36 +111,36 @@ export default function Classroom(props) {
             <img className="card-img-top h-100" style={{backgroundSize:"cover"}} src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGxlYXJuaW5nfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
             <div className="card-img-overlay d-flex justify-content-between">
                 <div>
-                <h5 class="card-title h1 text-left text-light">{title}</h5>
+                <h5 className="card-title h1 text-left text-light">{title}</h5>
                 <p className="card-text h3 text-left text-light">{instructor}</p>
                 </div>
                 <div className="d-flex flex-row-reverse">
 
-            <div class="dropdown">
-                      <button class="btn btn-light dropdown" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <div className="dropdown">
+                      <button className="btn btn-light dropdown" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         <i className="fa fa-ellipsis-v"></i>
                       </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMen uButton1">
+                      <ul className="dropdown-menu" aria-labelledby="dropdownMen uButton1">
                         <li 
-                        onClick={()=>Leave()}
-                        ><a class="dropdown-item" href="#">Leave</a></li>
+                        ><button className="dropdown-item"
+                        onClick={()=>Leave()} >Leave</button></li>
                         </ul>
             </div>
                 </div>
             </div>
         </div>
-        <div class="card text-center w-75 p-2 m-2">
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs nav-fill">
+        <div className="card text-center w-75 p-2 m-2">
+          <div className="card-header">
+            <ul className="nav nav-tabs card-header-tabs nav-fill">
               {NavList.map(item=>
-              <li class="nav-item" key={item.Id}>
+              <li className="nav-item" key={item.Id}>
                 <a className={item.status?"nav-link active":"nav-link"}
                 onClick={()=>onChange(item.Id)}>{item.title}</a>
               </li>
               )}
             </ul>
           </div>
-          <div class="card-body">
+          <div className="card-body">
             {NavList[0].status?
             // Lectures
             <div>
@@ -151,14 +151,14 @@ export default function Classroom(props) {
                 <div className="card" key={item.ID}>
                 <div className="card-header mt-2 mb-2 d-flex justify-content-between">
                     <div>
-                    <h5 class="card-title text-left text-bold">{item.InstructorName}</h5>
+                    <h5 className="card-title text-left text-bold">{item.InstructorName}</h5>
                     <p className="card-text text-left text-secondary" style={{fontSize:15}}>{item.SubmitTime}</p>
                     </div>
                     
                 </div>
                 <div className="card-body">
-                    <p class="card-title text-left text-bold h4 mb-3 mx-2">{item.Description}</p>
-                    {item.Notes!=null?<p class="card-title text-left">{item.Notes}</p>:null}
+                    <p className="card-title text-left text-bold h4 mb-3 mx-2">{item.Description}</p>
+                    {item.Notes!=null?<p className="card-title text-left">{item.Notes}</p>:null}
                     {item.Video!=null?
                         <iframe width="560" height="315" src={item.Video}>
                         </iframe>:null
@@ -166,7 +166,7 @@ export default function Classroom(props) {
                     {item.File!=null?
                     <div className="card w-50">
                         <div className="card-body">
-                        <h5 class="card-title text-left text-bold">{title}</h5>
+                        <h5 className="card-title text-left text-bold">{title}</h5>
                         </div>
                     </div>
                     :null}
@@ -183,12 +183,12 @@ export default function Classroom(props) {
             // People
             <div className="text-left">
                 <div className="d-flex m-3 p-2 justify-content-between border-bottom">
-                <h4 class="card-title text-left text-bold">Classmates</h4>
+                <h4 className="card-title text-left text-bold">Classmates</h4>
                     <p className="card-text text-left ">{TotalStudent} Students</p>
                 </div>
-                <div class="">
+                <div className="">
                   {Student.map(item=>
-                        <div class="border-bottom p-2 mx-4" key={item.ID}>{item.StudentName}</div>
+                        <div className="border-bottom p-2 mx-4" key={item.ID}>{item.StudentName}</div>
                     )}
                 </div>
             </div>

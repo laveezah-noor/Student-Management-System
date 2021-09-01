@@ -22,7 +22,7 @@ export default function Notifications(props) {
         <div style={{margin:"3rem 3rem 3rem 100px"}}>
             <h3 className="mt-3 mb-2 mx-5">Notification</h3>
             <div className="d-flex flex-row mx-5">
-                    <input className="form-control m-2"
+                    {/* <input className="form-control m-2"
                     // onChange={this.changeDepartmentIdFilter}
                     placeholder="Search By Name"/>
 
@@ -47,7 +47,7 @@ export default function Notifications(props) {
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
                         <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z"/>
                         </svg>
-                    </button>
+                    </button> */}
                     {/* <button type="button" 
                     // className="btn btn-light"
                     className="btn btn-light mr-1"
@@ -63,22 +63,76 @@ export default function Notifications(props) {
                             <hr/>
                 <div className="row m-4">
                     {/* List */}
-                    <ul class="list-group list-group-flush">
-                    {DataList.map(item=>{
+                    {/* <ul class="list-group list-group-flush"> */}
+                    {/* {DataList.map(item=>{
                         console.log(item);
                         return(
                             <li key={item.ID} className="border-bottom p-2 d-flex justify-content-between align-items-start">
                               <div class="ms-2 me-auto">
                                 {/* <div class="fw-bold">Subheading</div> */}
-                                {item.Message}
-                              </div>
+                                {/* {item.Message} */}
+                              {/* </div> */}
                               {/* <span class="badge bg-primary rounded-pill">14</span> */}
-                            </li>
+                            {/* </li> */}
                             
+                        {/* )} */}
+                    {/* )} */}
+                    {/* </ul> */}
+                    <table className="table">
+                    {DataList.map(item=>{
+                        // console.log(item);
+                        const icon = [
+                            {
+                            icon: 'bi bi-journal-check',
+                            label: 'UPLOADED LECTURE'
+                            },
+                            {
+                            icon: 'bi bi-journal-check',
+                            label: 'NEW LECTURE'
+                            },
+                            {
+                            icon: 'bi bi-journal-x',
+                            label: 'DELETED LECTURE'
+                            },
+                            {
+                            icon: 'bi bi-person-check',
+                            label: 'STUDENT JOINED'
+                            },
+                            {
+                            icon: 'bi bi-person-dash',
+                            label: 'STUDENT LEFT'
+                            },
+                            {
+                            icon: 'bi bi-book',
+                            label: 'JOINED COURSE'
+                            },
+                            {
+                            icon: 'bi bi-box-arrow-left',
+                            label: 'LEFT COURSE'
+                            },
+                                
+                        ]
+                        return(
+                            <tr className="row m-2">
+                                <td className="col-1">
+                                    {icon.map(i=>{
+                                        const action = item.Action;
+                                        console.log(action,i.label)
+                                        if(action==i.label){
+                                            return(
+                                            <i className={i.icon} style={{fontSize:'20px'}}></i>
+                                            )
+                                        }
+                                    })}
+                                </td>
+                                {/* <td className="col">{item.Action}</td> */}
+                                <td className="text-left col">{item.Message}</td>
+                                <td className="col">{item.CreatedTime}</td>
+                                
+                            </tr>
                         )}
-                    )}
-                    </ul>
-                    
+                    )}  
+                    </table>
                 </div>
             </div>
     )

@@ -117,7 +117,8 @@ export default function Classroom(props) {
             }
     };
     const createClick = () =>{
-        console.log(Description,
+        console.log(
+            Description,
             Notes,
             Video,
             FileName,
@@ -166,7 +167,6 @@ export default function Classroom(props) {
             $('#exampleModal .btn-close').click()
     };
 
-    // console.log(File);
     useEffect(() => {
         getDataList()
     }, [props]);
@@ -308,7 +308,9 @@ export default function Classroom(props) {
                             <span className="input-group-text">File</span>
                             <input type="file" className="form-control"
                             value={FileName}
-                            onChange={(e)=>setFileName(e.target.files[0].name)}/>
+                            onChange={(e)=>{
+                                console.log(e.target.files[0].name)
+                                setFileName(e.target.files[0].name)}}/>
                         </div>
                                 
                      </div>

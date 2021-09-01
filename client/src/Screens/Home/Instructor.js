@@ -8,9 +8,9 @@ export default function Instructor(props) {
     
   const getDataList = () => {
       axios
-        .get(`http://localhost:4000/instructor`)
+        .get(`http://localhost:4000/trainer`)
         .then((response) => response.data)
-        .then((response) => setInstructorList(response));
+        .then((response) => setInstructorList(response[0]));
       
   };
 
@@ -26,7 +26,7 @@ export default function Instructor(props) {
     <div class="breadcrumbs">
       <div class="container">
         <h2>Trainer</h2>
-        <p>Est dolorum ut non facere possimus quibusdam eligendi voluptatem. Quia id aut similique quia voluptas sit quaerat debitis. Rerum omnis ipsam aperiam consequatur laboriosam nemo harum praesentium. </p>
+        {/* <p>Est dolorum ut non facere possimus quibusdam eligendi voluptatem. Quia id aut similique quia voluptas sit quaerat debitis. Rerum omnis ipsam aperiam consequatur laboriosam nemo harum praesentium. </p> */}
       </div>
     </div>
     {/* <!-- End Breadcrumbs --> */}

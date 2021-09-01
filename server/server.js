@@ -197,7 +197,7 @@ app.get('/classroom/:courseid', (req, res) => {
 });
 
 app.delete('/leavecourse/:id', (req, res) => {
-  const DELETE_TASK = `DELETE FROM COURSE_STUDENT WHERE StudentIDv= ${req.params.id};`;
+  const DELETE_TASK = `DELETE FROM COURSE_STUDENT WHERE StudentID= ${req.params.id};`;
   connection.query(DELETE_TASK, (err, result) => {
     if (err) {
       console.log(err);
@@ -208,9 +208,10 @@ app.delete('/leavecourse/:id', (req, res) => {
 });
 
 app.post('/addLecture', (req, res) => {
-  console.log("File: ",req.body.File)
-    const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, Video, File, Notes, InstructorID, SubmitTime)
-    VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.Video}','${req.body.File}','${req.body.Notes}',${req.body.InstructorID},NOW());`;
+  console.log("File: ",req.body.FileName)
+  if (req.body.FileName=='') {
+    const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, Video, Notes, InstructorID, SubmitTime)
+    VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.Video}','${req.body.Notes}',${req.body.InstructorID},NOW());`;
     console.log(ADD_TASK, `add lecture`);
   // }
   connection.query(ADD_TASK, (err) => {
@@ -220,6 +221,8 @@ app.post('/addLecture', (req, res) => {
       res.send("Lecture Added");
     }
   });
+  }
+    
 });
 
 app.post('/upload/:File',(req,res)=>{
@@ -514,6 +517,49 @@ app.put('/updateInstructor', (req, res) => {
     }
   });
 });
+
+
+app.get('/myTrainers/:id', (req, res) => {
+  
+  if (req.query.search){
+    console.log("Query: ",req.query)
+    const SELECT_ALL_TASKS = `
+  Call MyTrainers(${req.params.id},0,"${req.query.filter}","${req.query.search}");
+  `;
+  console.log(SELECT_ALL_TASKS)
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+  } else if (req.query.sort){
+    const SELECT_ALL_TASKS = `
+  Call MyTrainers(${req.params.id},${req.query.sort},"${req.query.filter}","");
+  `;
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+  } else {
+    const SELECT_ALL_TASKS = `
+  Call MyTrainers(${req.params.id},0,"","");
+  `;
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+  }
+  
+});
+
 
 
 app.get('/myStudents/:id', (req, res) => {

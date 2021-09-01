@@ -3,14 +3,63 @@ import axios from 'axios'
 
 export default function Instructor(props) {
   const [InstructorList, setInstructorList] = useState([]);
-    
+  const ID = props.match.params.user;
+  const [Filter,setFilter] = useState('ID')
+  const FiltersList=[
+      // {label: '', value: ''},
+      {label: "ID", value: "ID"},
+      {label: "FirstName", value: "FirstName"},
+      {label: "LastName", value: "LastName"},
+      {label: "CourseName", value: "CourseName"},
+      // {label: "Email", value: "Email"},
+      // {label: "Contact", value: "Contact"}
+      
+  ]
+              
+
   const getDataList = () => {
       axios
-        .get(`http://localhost:4000/instructor`)
+        .get(`http://localhost:4000/myTrainers/${ID}`)
         .then((response) => response.data)
-        .then((response) => setInstructorList(response));
+        .then((response) => setInstructorList(response[0]));
       
   };
+
+    const Search = (val) =>{
+      console.log(val);
+      if (val!=""){
+          axios
+        .get(`http://localhost:4000/myTrainers/${ID}?filter=${Filter}&search=${val}`)
+        .then((response) => response.data)
+        .then((response) => {
+            console.log(response[0]);
+          setInstructorList(response[0])
+          })
+      }
+      else{
+          getDataList();
+      }
+  }
+  const Sort = (asc) =>{
+      console.log(Filter)
+      if(asc){
+          axios
+        .get(`http://localhost:4000/myTrainers/${ID}?filter=${Filter}&sort=1`)
+        .then((response) => response.data)
+        .then((response) => {
+            console.log(response[0]);
+          setInstructorList(response[0])
+        });
+      } else {
+          axios
+        .get(`http://localhost:4000/myTrainers/${ID}?filter=${Filter}&sort=2`)
+        .then((response) => response.data)
+        .then((response) => {
+            console.log(response[0]);
+          setInstructorList(response[0])
+        });
+      }
+  }
 
   useEffect(() => {
       getDataList();
@@ -19,31 +68,32 @@ export default function Instructor(props) {
     <div style={{margin:"3rem 3rem 3rem 100px"}}>
       <h3 className="mt-3 mb-2 mx-5">My Instructors</h3>
         <div className="d-flex flex-row mx-5">
-          <input className="form-control m-2"
-          // onChange={this.changeDepartmentIdFilter}
-          placeholder="Search By Name"/>
 
-          <select class="form-select m-2" aria-label="Sort By">
-            <option selected>Sort By</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          <button type="button" className="btn btn-light"
-          // onClick={()=>this.sortResult('DepartmentId',true)}
-          >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">
-              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z"/>
-              </svg>
-          </button>
+        <input className="form-control m-2"
+                    onChange={(e)=>Search(e.target.value)}
+                    // value={Search}
+                    placeholder={`Search By ${Filter}`}/>
+                        <select class="form-select m-2 w-25" aria-label="Sort By" value={Filter} onChange={(e)=>{setFilter(e.target.value)}}>
+                          {FiltersList.map(fil=><option value={fil.value}>{`By ${fil.label}`}</option>)}
+                        </select>                 
 
-          <button type="button" className="btn btn-light"
-          // onClick={()=>this.sortResult('DepartmentId',false)}
-          >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
-              <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z"/>
-              </svg>
-          </button>  
+                    <button type="button" className="btn btn-light"
+                    onClick={()=>Sort(true)}
+                    data-toggle="tooltip" data-placement="bottom" title="Ascending Order"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z"/>
+                        </svg>
+                    </button>
+
+                    <button type="button" className="btn btn-light"
+                    onClick={()=>Sort(false)}
+                    data-toggle="tooltip" data-placement="bottom" title="Descending Order"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z"/>
+                        </svg>
+                    </button>
         </div>
         
         <hr/>
@@ -58,6 +108,7 @@ export default function Instructor(props) {
              <Card 
              key={item.ID}
              InstructorName={item.FirstName+' '+item.LastName}
+             CourseName={item.CourseName}
              />
            )})}
          </div>
@@ -82,6 +133,7 @@ const Card = (props) =>{
                 <p>
                   {InstructorDetail}
                 </p>
+
                 <div class="social">
                   <a href=""><i class="bi bi-twitter"></i></a>
                   <a href=""><i class="bi bi-facebook"></i></a>

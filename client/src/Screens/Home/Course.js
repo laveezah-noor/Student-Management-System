@@ -10,7 +10,9 @@ export default function Course(props) {
         axios
           .get(`http://localhost:4000/course`)
           .then((response) => response.data)
-          .then((response) => setCourseList(response));
+          .then((response) => 
+          {console.log(response[0]);
+            setCourseList(response[0])});
         
     };
 
@@ -26,7 +28,7 @@ export default function Course(props) {
             <div class="breadcrumbs">
               <div class="container">
                 <h2>Courses</h2>
-                <p>Est dolorum ut non facere possimus quibusdam eligendi voluptatem. Quia id aut similique quia voluptas sit quaerat debitis. Rerum omnis ipsam aperiam consequatur laboriosam nemo harum praesentium. </p>
+                {/* <p>Variety Of New Courses. </p> */}
               </div>
             </div>
             {/* <!-- End Breadcrumbs --> */}

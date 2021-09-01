@@ -1,9 +1,9 @@
+
 import './App.css';
 import {
   BrowserRouter as Router, 
   Switch, 
   Route, useRouteMatch, useParams, useHistory} from 'react-router-dom'
-// import main from './Screens/Home/Login';
 import Home from './Screens/Home/Home';
 import Header from './Screens/Home/Header';
 import Course from './Screens/Home/Course';

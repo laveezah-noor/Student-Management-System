@@ -32,7 +32,8 @@ export default function Home() {
             <div class="container position-relative" data-aos="zoom-in" data-aos-delay="100">
               <h1>Learning Today,<br />Leading Tomorrow</h1>
               <h2>Learn new everything from our wide ranges of Course.</h2>
-              <a href="courses.html" class="btn-get-started">Get Started</a>
+              <a onClick={()=>{window.location.pathname = `/login`}} href="#" class="btn-get-started"
+              >Get Started</a>
             </div>
           </section>
           {/* <!-- End Hero --> */}
@@ -118,9 +119,9 @@ export default function Home() {
                         either in your personal life, your career or both. Choose a mentor who will give you the best insight
                         into your current phase of life or career level.
                       </p>
-                      <div class="text-center">
+                      {/* <div class="text-center">
                         <a href="about.html" class="more-btn">Learn More <i class="bx bx-chevron-right"></i></a>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div class="col-lg-8 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
@@ -128,21 +129,21 @@ export default function Home() {
                       <div class="row">
                         <div class="col-xl-4 d-flex align-items-stretch">
                           <div class="icon-box mt-4 mt-xl-0">
-                            <i class="bx bx-receipt"></i>
+                            <i class="bi bi-receipt"></i>
                             <h4>Build Trust</h4>
                             <p>The student and mentor relation has proved to be 75% more productive then self learning.</p>
                           </div>
                         </div>
                         <div class="col-xl-4 d-flex align-items-stretch">
                           <div class="icon-box mt-4 mt-xl-0">
-                            <i class="bx bx-cube-alt"></i>
+                            <i class="bi bi-box"></i>
                             <h4>Clear Learning paths</h4>
                             <p>This world and the internet is a sea of knowlege. Don't let yourself drown in it in the search of a pearl.</p>
                           </div>
                         </div>
                         <div class="col-xl-4 d-flex align-items-stretch">
                           <div class="icon-box mt-4 mt-xl-0">
-                            <i class="bx bx-images"></i>
+                            <i class="bi bi-images"></i>
                             <h4>Certifications</h4>
                             <p>A certificate to show off your skills to the world.</p>
                           </div>
@@ -157,7 +158,7 @@ export default function Home() {
             </section>
             {/* <!-- End Why Us Section --> */}
             {/* <!-- ======= Popular Courses Section ======= --> */}
-    <section id="popular-courses" class="courses">
+    {/* <section id="popular-courses" class="courses">
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
@@ -191,10 +192,10 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div> 
+          </div>  */}
           {/* <!-- End Course Item--> */}
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+          {/* <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
             <div class="course-item">
               <img src="src/img/course-2.jpg" class="img-fluid" alt="..."/>
               <div class="course-content">
@@ -218,10 +219,10 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div> 
+          </div>  */}
           {/* <!-- End Course Item--> */}
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
+          {/* <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
             <div class="course-item">
               <img src="src/img/course-3.jpg" class="img-fluid" alt="..."/>
               <div class="course-content">
@@ -245,13 +246,13 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            </div>
+            </div> */}
             {/* <!-- End Course Item --> */}
 
-         </div>
+         {/* </div>
 
       </div>
-    </section>
+    </section> */}
     {/* <!-- End Popular Courses Section --> */}
 
 
@@ -259,7 +260,7 @@ export default function Home() {
     {/* <!-- End #main --> */}
 
   {/* <div id="preloader"></div> */}
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fa fa-arrow-up"></i></a>
         <Footer/>         
         </div>
     )

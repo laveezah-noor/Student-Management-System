@@ -6,16 +6,16 @@ import axios from 'axios'
 export default function Sidebar(props) {
     const [course,setCourse] = useState('')
     const getCourse = () =>{
-        if (role==2){
-            axios
-          .get(`http://localhost:4000/courseTrainer/${user}`)
-          .then((response) => response.data)
-          .then((response) => {
-            setCourse(response[0]['ID'])
-            console.log(response,course);
-            });
+    //     if (role==2){
+    //         axios
+    //       .get(`http://localhost:4000/courseTrainer/${user}`)
+    //       .then((response) => response.data)
+    //       .then((response) => {
+    //         setCourse(response[0]['ID'])
+    //         console.log(response,course);
+    //         });
         
-        }
+    //     }
     }
     const StudentData = [
         {
@@ -132,9 +132,11 @@ export default function Sidebar(props) {
         getCourse()
     }, [])
     return (
-        <div className="Sidebar">
+        <div className="Sidebar sticky-bottom d-block">
+            <h1 className="p-2 text-white my-3 h2 text-bold">Mentor</h1>
+              
             <ul 
-            className="SidebarList"
+            className="SidebarList mt-5"
             >
                 {(role==1)?
                     StudentData.map((val,key)=>{
