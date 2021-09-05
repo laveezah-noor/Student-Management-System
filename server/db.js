@@ -4,7 +4,7 @@ require('dotenv').config();
 const connection = sql.createConnection({
   host: 'localhost',
   user: 'user',
-  password: 'Allan.3048',
+  password: '',
   database: 'ClassroomSystem',
   multipleStatements: true});
 
