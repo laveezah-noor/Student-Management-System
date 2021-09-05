@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const upload = require('express-fileupload')
+const path = require("path");
+const fs = require('fs');
 const connection = require(`./db`);
 
 const app = express();
@@ -208,10 +210,22 @@ app.delete('/leavecourse/:id', (req, res) => {
 });
 
 app.post('/addLecture', (req, res) => {
-  console.log("File: ",req.body.FileName)
+  console.log("LectureFile: ",req.body.FileName)
   if (req.body.FileName=='') {
     const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, Video, Notes, InstructorID, SubmitTime)
     VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.Video}','${req.body.Notes}',${req.body.InstructorID},NOW());`;
+    console.log(ADD_TASK, `add lecture`);
+  // }
+  connection.query(ADD_TASK, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Lecture Added");
+    }
+  });
+  } else {
+    const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, File, Video, Notes, InstructorID, SubmitTime)
+    VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.FileName}','${req.body.Video}','${req.body.Notes}',${req.body.InstructorID},NOW());`;
     console.log(ADD_TASK, `add lecture`);
   // }
   connection.query(ADD_TASK, (err) => {
@@ -225,22 +239,33 @@ app.post('/addLecture', (req, res) => {
     
 });
 
-app.post('/upload/:File',(req,res)=>{
-  if (req.params.File) {
-    console.log(req.params.File)
-    var file = req.params.File
-    var filename = file.name
-    // var filename = req.params.File
-    console.log(filename)
-    file.mv('client/public/LectureFiles'+filename, function (err){
-      if(err){
-        res.send(err)
-      } else {
-        res.send('File Uploaded')
-        // res.json({filename:file.name, filePath: `/uploads/${file.name}`})
-      }
-    })
+// Upload Endpoint
+app.post('/uploadLecture', (req, res) => {
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
   }
+
+  const file = req.files.file;
+  let reqPath = path.join(__dirname, '../');//It goes 1 folders or directories back from given __dirname.
+  console.log("File:  ",file, reqPath)
+
+  file.mv(`${reqPath}client/public/LectureFiles/${file.name}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    res.json({ fileName: file.name, filePath: `/LectureFiles/${file.name}` });
+  });
+});
+
+app.delete('/deleteLectureFile/:path',(req,res) =>{
+  fs.unlink(req.params.path, (err) => {
+    if (err) {
+      console.log(err)
+    }
+  res.send('Deleted')
+  })
 })
 
 app.delete('/deleteLecture/:id', (req, res) => {

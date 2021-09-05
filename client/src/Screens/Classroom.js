@@ -3,18 +3,7 @@ import axios from 'axios';
 import $ from 'jquery';
 
 export default function Classroom(props) {
-    const [Course,setCourse] = useState([]);
-    const [Student,setStudent] = useState([]);
-    const [LectureList,setLectureList] = useState([]);
-    const [TotalStudent,setTotalStudent] = useState('');
-    const [ModalTitle, setModalTitle] = useState('');
-    const [LectureID, setLectureID] = useState(0);
-    const [Description, setDescription] = useState('');
-    const [Notes, setNotes] = useState('');
-    const [Video, setVideo] = useState('');
-    // const [File, setFile] = useState('');
-    const [FileName, setFileName] = useState('');
-    
+    const FilePath = `/LectureFiles/`;
     const [NavList, setNavList] = useState([
         {
             Id:0,
@@ -32,7 +21,20 @@ export default function Classroom(props) {
         //     status: false,
         // }
     ]);
-
+    
+    const [Course,setCourse] = useState([]);
+    const [Student,setStudent] = useState([]);
+    const [LectureList,setLectureList] = useState([]);
+    const [TotalStudent,setTotalStudent] = useState('');
+    const [ModalTitle, setModalTitle] = useState('');
+    const [LectureID, setLectureID] = useState(0);
+    const [Description, setDescription] = useState('');
+    const [Notes, setNotes] = useState('');
+    const [Video, setVideo] = useState('');
+    const [File, setFile] = useState('');
+    const [PrevFile, setPrevFile] = useState('');
+    const [FileName, setFileName] = useState('');
+    
     const onChange = (e) =>{
         let NewArr = [...NavList]
         NewArr.map(item=>
@@ -40,23 +42,61 @@ export default function Classroom(props) {
         NewArr[e].status = true;
         setNavList(NewArr)
     }
-    // const fileInsert = e =>{
-    //     // setFile(e.target.files[0])
-    //     setFileName(e.target.files[0].name);
-    //     // console.log(e.target.files[0], 'File==>',File);
-    // }
-    const fileupload  = (e) =>{
-        axios
-        .post(`http://localhost:4000/upload/${File}`)
-              .then((result) => {
-                console.log(result);
-                
-                getDataList();
-            } // fetching the updated list
-                ,(error)=>{
-                alert('Failed');
-            })
-    }
+    const onChangeFile = e => {
+        setPrevFile(File)
+        setFile(e.target.files[0]);
+        setFileName(e.target.files[0].name);
+      };
+    
+    const fileUpload  = (e) =>{
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('file', File);
+        console.log(File,e)
+        try {
+          const res = axios
+          .post('http://localhost:4000/uploadLecture', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+          });
+          
+          const { fileName, filePath } = res.data;
+        console.log('File Uploaded');
+        } catch (err) {
+        console.log('There was a problem with the server');
+        console.log(err);
+        }
+      };
+    
+    const fileUpdate  = (e) =>{
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('file', File);
+        console.log(File,e)
+        try {
+            const res = axios
+            .delete(`http://localhost:4000//deleteLectureFile/${PrevFile}`);
+              console.log(res);
+              try {
+                const res = axios
+                .post('http://localhost:4000/uploadLecture', formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  },
+                });
+                  const { fileName, filePath } = res.data;
+                  console.log('File Updated', fileName, filePath);
+              } 
+              catch (err) {
+                  console.log(err);
+              }
+        }
+        catch (err) {
+            console.log(err);
+        }
+      };
+    
     const [CourseID,setCourseID] = useState(0);
     const [InstructorID,setInstructorID] = useState(0);
     const [title,setTitle] = useState('Course Name');
@@ -88,7 +128,7 @@ export default function Classroom(props) {
         setDescription('');
         setNotes('');
         setVideo('');
-        // setFile('')
+        setFile('')
         setFileName('');
         setLectureID(0)
     };
@@ -115,13 +155,15 @@ export default function Classroom(props) {
                 alert('Failed');
             })
             }
+            $('#exampleModal .btn-close').click()
     };
-    const createClick = () =>{
+    const createClick = e =>{
         console.log(
             Description,
             Notes,
             Video,
             FileName,
+            File,
             InstructorID,
             CourseID);
         if(window.confirm('Are you sure?')){
@@ -136,7 +178,9 @@ export default function Classroom(props) {
               })
               .then((result) => {
                 console.log(result);
-                fileupload(File)
+                if(FileName!=''&File!=''){
+                    fileUpload(e)
+                }
                 getDataList();
             } // fetching the updated list
                 ,(error)=>{
@@ -178,13 +222,6 @@ export default function Classroom(props) {
                 <h5 className="card-title h1 text-left text-light">{title}</h5>
                 <p className="card-text h3 text-left text-light">{instructor}</p>
             </div>
-            <div className="card-body">
-                {/* <h5 className="card-title">{title}</h5>
-                <p className="card-text">{instructor}</p> */}
-            </div>
-            {/* <div className="card-footer">
-                Hello
-            </div> */}
         </div>
         <div className="card text-center w-75 p-2 m-2">
           <div className="card-header">
@@ -240,7 +277,8 @@ export default function Classroom(props) {
                     {item.File!=null?
                     <div className="card w-50">
                         <div className="card-body">
-                        <a href="" className="h5 card-title text-left text-bold">{item.File}</a>
+                        <a href={FilePath+item.File} target="_blank"
+                        className="h5 card-title text-left text-bold">{item.File}</a>
                         </div>
                     </div>
                     :null}
@@ -292,9 +330,6 @@ export default function Classroom(props) {
                             <textarea className="form-control" aria-label="With textarea"
                             value={Notes}
                             onChange={(e)=>setNotes(e.target.value)}></textarea>
-                            {/* <input type="text" className="form-control"
-                            value={Notes}
-                            onChange={(e)=>setNotes(e.target.value)}/> */}
                         </div>
 
                         <div className="input-group mb-3">
@@ -303,14 +338,15 @@ export default function Classroom(props) {
                             value={Video}
                             onChange={(e)=>setVideo(e.target.value)}/>
                         </div>
-                                
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">File</span>
-                            <input type="file" className="form-control"
-                            value={FileName}
-                            onChange={(e)=>{
-                                console.log(e.target.files[0].name)
-                                setFileName(e.target.files[0].name)}}/>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">File</span>
+                          <div class="custom-file" style={{'margin-top':'2px'}}>
+                            <input type="file" 
+                            class="custom-file-input" 
+                            id="inputGroupFile01"
+                            onChange={(e)=>onChangeFile(e)} />
+                            <label class="form-control" for="inputGroupFile01">{FileName}</label>
+                          </div>
                         </div>
                                 
                      </div>
@@ -324,7 +360,7 @@ export default function Classroom(props) {
                     {LectureID===0?
                         <button type="button"
                         className="btn btn-primary float-start"
-                        onClick={()=>createClick()}
+                        onClick={(e)=>createClick(e)}
                         >Create</button>
                         :null}
 

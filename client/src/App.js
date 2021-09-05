@@ -26,6 +26,7 @@ import Students from './Screens/Admin/Students';
 import Instructors from './Screens/Admin/Instructors';
 import MyStudents from './Screens/Instructor/MyStudents';
 import { useEffect, useState } from 'react';
+import FileUpload from './Components/fileUpload';
 
 
 function App() {
@@ -33,21 +34,21 @@ function App() {
   const [user,setUser] = useState(0)
   const [role,setRole] = useState(0)
   const getLogin = () =>{
-    axios
-        .get(`http://localhost:4000/login`)
-        .then((response) => response.data)
-        .then((response) => {
-            console.log(response);
-            // if (response.loggedIn){
-            //   setUser(response.user)
-            //   setStatus(response.loggedIn)
-            //   setRole(response.role)
-            // }
-        })
+    // axios
+    //     .get(`http://localhost:4000/login`)
+    //     .then((response) => response.data)
+    //     .then((response) => {
+    //         console.log(response);
+    //         // if (response.loggedIn){
+    //         //   setUser(response.user)
+    //         //   setStatus(response.loggedIn)
+    //         //   setRole(response.role)
+    //         // }
+    //     })
   }
   console.log("Status: ",status,user,role)
   useEffect(() => {
-    getLogin()
+    // getLogin()
   }, []);
 
   return (
@@ -60,6 +61,7 @@ function App() {
       <Route path={'/Home/:user/:role'} component={Student} user={user} role={role}/>
       <Route path={'/login'} component={Login} login={()=>getLogin()}/>
       <Route path={'/register'} component={Register} />
+      <Route path={'/upload'} component={FileUpload} />
       
       </Switch>
       
