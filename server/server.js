@@ -95,7 +95,8 @@ app.get('/notification/:role/:id', (req, res) => {
   const id = req.params.id;
   console.log(role,id)
   const SELECT_ALL_TASKS = `
-  SELECT * FROM NOTIFICATION WHERE UserID = ${id};
+  SELECT * FROM NOTIFICATION WHERE UserID = ${id}
+  ORDER BY ID DESC;
   ;
   `;
   connection.query(SELECT_ALL_TASKS, (err, result) => {

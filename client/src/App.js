@@ -26,30 +26,8 @@ import Students from './Screens/Admin/Students';
 import Instructors from './Screens/Admin/Instructors';
 import MyStudents from './Screens/Instructor/MyStudents';
 import { useEffect, useState } from 'react';
-import FileUpload from './Components/fileUpload';
-
 
 function App() {
-  const [status,setStatus] = useState(false)
-  const [user,setUser] = useState(0)
-  const [role,setRole] = useState(0)
-  const getLogin = () =>{
-    // axios
-    //     .get(`http://localhost:4000/login`)
-    //     .then((response) => response.data)
-    //     .then((response) => {
-    //         console.log(response);
-    //         // if (response.loggedIn){
-    //         //   setUser(response.user)
-    //         //   setStatus(response.loggedIn)
-    //         //   setRole(response.role)
-    //         // }
-    //     })
-  }
-  console.log("Status: ",status,user,role)
-  useEffect(() => {
-    // getLogin()
-  }, []);
 
   return (
     <div className="App"> 
@@ -58,11 +36,9 @@ function App() {
       <Route exact path={'/'} component={Home}/>
       <Route path={`/courses`} component={Course} />
       <Route path={`/trainer`} component={Instructor} />
-      <Route path={'/Home/:user/:role'} component={Student} user={user} role={role}/>
-      <Route path={'/login'} component={Login} login={()=>getLogin()}/>
+      <Route path={'/Home/:user/:role'} component={Student}/>
+      <Route path={'/login'} component={Login}/>
       <Route path={'/register'} component={Register} />
-      <Route path={'/upload'} component={FileUpload} />
-      
       </Switch>
       
     </Router>
@@ -76,16 +52,14 @@ const Student = (props) => {
   const {user} = useParams();
   const {role} = useParams();
   const history = useHistory();
-  // console.log('Student', user, role);
   let { path, url } = useRouteMatch();
-  // console.log(path, url)
   useEffect(() => {
 }, [props]);
 
   return (
-    <div className="Main">
+    <div className="Main d-flex">
     <SideBar role={role} user={user}/>
-    <div className="Screens">
+    <div className="Screens col">
       {(role==1)?
       <Switch>
       <Route exact path={`${path}`} component={Dashboard} />

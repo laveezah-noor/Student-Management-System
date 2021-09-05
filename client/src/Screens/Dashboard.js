@@ -63,7 +63,7 @@ export default function Dashboard(props) {
             
             <OverviewCard 
               title={'Courses In Progress'}
-              icon={"fa-book"}
+              icon={"bi bi-book"}
               value={S_Courses}
                 />
             
@@ -83,24 +83,6 @@ export default function Dashboard(props) {
             )})}
             
             </div>
-            {/* {data.map(item=>
-            <StCard 
-                    title={item.label}
-                    icon={'fa-chalkboard'} 
-                    cls={'red'} 
-                    value={item.value} />
-            )}
-            {
-                StudentData.map(item=>{
-                    return(
-                    <StCard 
-                    title={item.title}
-                    icon={item.icon} 
-                    cls={item.class} 
-                    value={item.value} />
-                )})
-            }
-             */}
             </div>
             :null}
             {role==2?
@@ -109,7 +91,7 @@ export default function Dashboard(props) {
             <h2 className="h3 m-2 mb-4 text-left">Overview</h2>
             <OverviewCard 
               title={'Total Students'}
-              icon={"fa-book"}
+              icon={"bi bi-people"}
               value={I_Students}
                 />
             </div>
@@ -135,27 +117,27 @@ export default function Dashboard(props) {
             <div className="d-flex">
             <OverviewCard 
               title={'Total Courses'}
-              icon={"fa-book"}
+              icon={"bi bi-book"}
               value={A_Courses}
                 />
             <OverviewCard 
               title={'Total Students'}
-              icon={"fa-book"}
+              icon={"bi bi-people"}
               value={A_Students}
                 />
             <OverviewCard 
               title={'Total Trainers'}
-              icon={"fa-book"}
+              icon={"bi bi-people"}
               value={A_Trainers}
                 />
             <OverviewCard 
               title={'Total Users'}
-              icon={"fa-book"}
+              icon={"bi bi-people-fill"}
               value={A_Users}
                 />
             <OverviewCard 
               title={'Total Admins'}
-              icon={"fa-book"}
+              icon={"bi bi-person"}
               value={A_Admins}
                 />
             </div>
