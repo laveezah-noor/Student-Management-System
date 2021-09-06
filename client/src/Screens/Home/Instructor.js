@@ -37,9 +37,11 @@ export default function Instructor(props) {
 
         <div class="row" data-aos="zoom-in" data-aos-delay="100">
           {InstructorList.map(item=>{
+            console.log(item)
             return(
             <Card 
             key={item.ID}
+            Profile={item.Profile}
             InstructorName={item.FirstName+' '+item.LastName}
             />
           )})}
@@ -55,11 +57,14 @@ export default function Instructor(props) {
 const Card = (props) =>{
   const CourseName = props.CourseName;
   const InstructorName = props.InstructorName;
+  const ProfileImage = props.Profile
   const InstructorDetail = '';
+  const ImagePath = '/ProfileImages/'
   return(
     <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
             <div class="member">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl0wBXgHGyB3MGOazyvMIMriErCQoLqxBAUA&usqp=CAU" class="img-fluid" alt=""/>
+              <img src={(ProfileImage!=null)?ImagePath+ProfileImage:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl0wBXgHGyB3MGOazyvMIMriErCQoLqxBAUA&usqp=CAU"}
+               className="img-fluid" alt=""/>
               <div class="member-content">
                 <h4>{InstructorName}</h4>
                 <span>{CourseName}</span>

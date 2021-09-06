@@ -77,6 +77,7 @@ export default function Dashboard(props) {
               CourseID={item.ID}
               CourseName={item.CourseName}
               CourseDetail={''}
+              CourseImage={item.Image}
               InstructorName={item.InstructorName}
               onClick = {()=>history.push(`${url}/Classroom/${item.ID}`)}
                 />
@@ -104,6 +105,7 @@ export default function Dashboard(props) {
               CourseID={item.ID}
               CourseName={item.CourseName}
               CourseDetail={''}
+              CourseImage={item.Image}
               InstructorName={item.InstructorName}
               onClick = {()=>history.push(`${url}/MyClassroom/${item.ID}`)}
                 />

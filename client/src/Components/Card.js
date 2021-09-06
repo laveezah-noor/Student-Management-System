@@ -31,6 +31,8 @@ function Card(params) {
     const CourseDetail = params.CourseDetail
     const InstructorName = params.InstructorName
     const CourseID = params.CourseID
+    const CourseImage = params.CourseImage
+    const ImagePath = '/CourseImages/'
     const onClick = params.onClick
     const [TotalStudent,setTotalStudent] = useState(0)
     const getData= () =>{
@@ -48,7 +50,7 @@ function Card(params) {
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" onClick={onClick}>
         <div class="course-item m-2">
           <img 
-          src="https://images.unsplash.com/photo-1593720213428-28a5b9e94613?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
+          src={(CourseImage!=null)?ImagePath+CourseImage:"https://images.unsplash.com/photo-1593720213428-28a5b9e94613?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"} 
           class="img-fluid" alt="..."/>
           <div class="course-content">
             {/* <div class="d-flex justify-content-between align-items-center mb-3">
@@ -83,6 +85,8 @@ function StudentAllCard(params) {
   const InstructorName = params.InstructorName
   const CourseID = params.CourseID
   const StudentID = params.StudentID
+  const CourseImage = params.CourseImage
+  const ImagePath = '/CourseImages/'
   const [TotalStudent,setTotalStudent] = useState(0);
   const [Status,setStatus] = useState(0);
   const getData= () =>{
@@ -123,7 +127,7 @@ function StudentAllCard(params) {
       <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
       <div class="course-item m-2">
         <img 
-        src="https://images.unsplash.com/photo-1593720213428-28a5b9e94613?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
+        src={(CourseImage!=null)?ImagePath+CourseImage:"https://images.unsplash.com/photo-1593720213428-28a5b9e94613?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"} 
         class="img-fluid" alt="..."/>
         <div class="course-content">
           {/* <div class="d-flex justify-content-between align-items-center mb-3">

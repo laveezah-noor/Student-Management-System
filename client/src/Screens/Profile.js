@@ -6,12 +6,14 @@ export default function Profile(props) {
     const {state} = useLocation();
     const UserID = parseInt(state.id);
     const RoleID = parseInt(state.role)
+    const ImagePath = '/ProfileImages/'
     const [UserName,setUserName] = useState('');
     const [UserPassword,setUserPassword] = useState('');
     const [FirstName,setFirstName] = useState('');
     const [LastName,setLastName] = useState('');
     const [Email,setEmail] = useState('');
     const [Contact,setContact] = useState('');
+    const [Profile,setProfile] = useState('');
     const Role = (RoleID==1)? 'Student': (RoleID==2)? 'Instructor' : (RoleID==3)? 'Admin': null 
     const getData = () =>{
         axios
@@ -25,6 +27,7 @@ export default function Profile(props) {
           setContact(response[0][0].Contact)
           setUserName(response[0][0].UserName)
           setUserPassword(response[0][0].UserPassword)
+          setProfile(response[0][0].Profile)
         })
     };
     const updateClick = () =>{
@@ -35,7 +38,8 @@ export default function Profile(props) {
             FirstName,
             LastName,
             Email,
-            Contact);
+            Contact,
+            Profile);
         if(window.confirm('Are you sure?')){
             axios
               .put(`http://localhost:4000/updateProfile`, {
@@ -46,7 +50,8 @@ export default function Profile(props) {
                 FirstName,
                 LastName,
                 Email,
-                Contact
+                Contact,
+                Profile
               })
               .then((result) => {
                 console.log(result);
@@ -156,7 +161,7 @@ export default function Profile(props) {
                 <img 
                 className="w-25" 
                 // style={{position:'absolute', top:120, left:130, border: "150px"}} 
-                src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"
+                src={(Profile!=null)?ImagePath+Profile:"https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"}
                 />
             </div>
             <div className="card-body">

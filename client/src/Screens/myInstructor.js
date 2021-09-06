@@ -105,10 +105,11 @@ export default function Instructor(props) {
          <div class="row" data-aos="zoom-in" data-aos-delay="100">
            {InstructorList.map(item=>{
              return(
-             <Card 
+             <TrainerCard 
              key={item.ID}
              InstructorName={item.FirstName+' '+item.LastName}
              CourseName={item.CourseName}
+             ProfileImage={item.Profile}
              />
            )})}
          </div>
@@ -119,14 +120,18 @@ export default function Instructor(props) {
     )
 }
 
-const Card = (props) =>{
+const TrainerCard = (props) =>{
   const CourseName = props.CourseName;
   const InstructorName = props.InstructorName;
+  const ProfileImage = props.ProfileImage;
+  const ImagePath = '/ProfileImages/'
   const InstructorDetail = '';
   return(
     <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
             <div class="member">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl0wBXgHGyB3MGOazyvMIMriErCQoLqxBAUA&usqp=CAU" class="img-fluid" alt=""/>
+              <img 
+              src={(ProfileImage!=null)?ImagePath+ProfileImage:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl0wBXgHGyB3MGOazyvMIMriErCQoLqxBAUA&usqp=CAU"}
+              class="img-fluid" alt=""/>
               <div class="member-content">
                 <h4>{InstructorName}</h4>
                 <span>{CourseName}</span>

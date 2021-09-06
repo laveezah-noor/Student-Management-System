@@ -107,6 +107,7 @@ export default function Courses(props) {
                         CourseName={item.CourseName}
                         CourseDetail={''}
                         InstructorName={item.InstructorName}
+                        CourseImage={item.Image}
                         StudentID={ID}
                         onClick={()=>{window.location.pathname = `Home/${ID}/${Role}/classroom/${item.ID}`}}
                         />)}
@@ -114,19 +115,5 @@ export default function Courses(props) {
                     
                 </div>
             </div>
-    //     </div>
-    // </div>
     )
 }
-
-// import React, { Component } from 'react'
-
-// export default class Courses extends Component {
-//     render() {
-//         return (
-//             <div>
-//             Hi Coursees                
-//             </div>
-//         )
-//     }
-// }

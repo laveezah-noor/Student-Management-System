@@ -216,7 +216,6 @@ app.post('/addLecture', (req, res) => {
     const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, Video, Notes, InstructorID, SubmitTime)
     VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.Video}','${req.body.Notes}',${req.body.InstructorID},NOW());`;
     console.log(ADD_TASK, `add lecture`);
-  // }
   connection.query(ADD_TASK, (err) => {
     if (err) {
       console.log(err);
@@ -228,7 +227,6 @@ app.post('/addLecture', (req, res) => {
     const ADD_TASK = `INSERT INTO LECTURE (CourseID, Description, File, Video, Notes, InstructorID, SubmitTime)
     VALUES (${req.body.CourseID},'${req.body.Description}','${req.body.FileName}','${req.body.Video}','${req.body.Notes}',${req.body.InstructorID},NOW());`;
     console.log(ADD_TASK, `add lecture`);
-  // }
   connection.query(ADD_TASK, (err) => {
     if (err) {
       console.log(err);
@@ -240,7 +238,6 @@ app.post('/addLecture', (req, res) => {
     
 });
 
-// Upload Endpoint
 app.post('/uploadLecture', (req, res) => {
   if (req.files === null) {
     return res.status(400).json({ msg: 'No file uploaded' });
@@ -261,6 +258,7 @@ app.post('/uploadLecture', (req, res) => {
 });
 
 app.delete('/deleteLectureFile/:path',(req,res) =>{
+  console.log(req.params.path);
   fs.unlink(req.params.path, (err) => {
     if (err) {
       console.log(err)
@@ -268,6 +266,47 @@ app.delete('/deleteLectureFile/:path',(req,res) =>{
   res.send('Deleted')
   })
 })
+
+app.put('/updateLecture', (req, res) => {
+  const UPDATE_COURSE = `UPDATE LECTURE SET Description = '${req.body.Description}', Notes = '${req.body.Notes}', Video = '${req.body.Video}', File = '${req.body.FileName}' WHERE ID = ${req.body.LectureID};`;
+  console.log(UPDATE_COURSE, `update course`);
+  connection.query(UPDATE_COURSE, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send('added');
+    }
+  });
+});
+
+app.post('/uploadCourseImage', (req, res) => {
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
+  }
+
+  const file = req.files.file;
+  let reqPath = path.join(__dirname, '../');//It goes 1 folders or directories back from given __dirname.
+  console.log("File:  ",file, reqPath)
+
+  file.mv(`${reqPath}client/public/CourseImages/${file.name}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    res.json({ fileName: file.name, filePath: `/CourseImages/${file.name}` });
+  });
+});
+
+app.delete('/deleteCourseImage/:path',(req,res) =>{
+  fs.unlink(req.params.path, (err) => {
+    if (err) {
+      console.log(err)
+    }
+  res.send('Deleted')
+  })
+})
+
 
 app.delete('/deleteLecture/:id', (req, res) => {
   const DELETE_TASK = `
@@ -431,18 +470,29 @@ app.get('/totalStudent/:CourseID', (req, res) => {
   
 });
 
-
-
 app.post('/addCourse', (req, res) => {
-  const ADD_TASK = `INSERT INTO COURSE (CourseName, InstructorID) VALUES ('${req.body.CourseName}', ${req.body.Instructor})`;
-  console.log(ADD_TASK, `add course`);
-  connection.query(ADD_TASK, (err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send('added');
-    }
-  });
+  console.log(req.body.ImgName)
+  if (req.body.ImgName!=''){
+    const ADD_TASK = `INSERT INTO COURSE (CourseName, InstructorID, Image) VALUES ('${req.body.CourseName}', ${req.body.Instructor},'${req.body.ImgName}')`;
+    console.log(ADD_TASK, `add course`);
+    connection.query(ADD_TASK, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send('added');
+      }
+    });
+  } else {
+    const ADD_TASK = `INSERT INTO COURSE (CourseName, InstructorID) VALUES ('${req.body.CourseName}', ${req.body.Instructor})`;
+    console.log(ADD_TASK, `add course`);
+    connection.query(ADD_TASK, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send('added');
+      }
+    });
+  }
 });
 
 app.delete('/course/:courseid', (req, res) => {
@@ -457,7 +507,7 @@ app.delete('/course/:courseid', (req, res) => {
 });
 
 app.put('/updateCourse', (req, res) => {
-  const UPDATE_COURSE = `UPDATE COURSE SET CourseName = '${req.body.CourseName}', INSTRUCTORID = ${req.body.Instructor} WHERE ID = ${req.body.CourseID};`;
+  const UPDATE_COURSE = `UPDATE COURSE SET CourseName = '${req.body.CourseName}', InstructorID = ${req.body.Instructor}, Image = '${req.body.ImgName}' WHERE ID = ${req.body.CourseID};`;
   console.log(UPDATE_COURSE, `update course`);
   connection.query(UPDATE_COURSE, (err) => {
     if (err) {

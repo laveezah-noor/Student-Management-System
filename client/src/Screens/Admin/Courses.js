@@ -10,6 +10,11 @@ export default function Course (props){
     const [CourseName, setCourseName] = useState('');
     const [Instructor, setInstructor] = useState(0);
     const [Filter,setFilter] = useState('ID')
+    const [Img,setImg] = useState('')
+    const [PrevImg,setPrevImg] = useState('')
+    const [ImgName,setImgName] = useState('')
+    const PhotoPath = '/CourseImages/';
+    
     const FiltersList=[
         {label: 'ID', value: 'ID'},
         {label: 'CourseName', value: 'CourseName'},
@@ -65,11 +70,68 @@ export default function Course (props){
         }
     }
 
+    const onChangeImg = e => {
+        console.log(ImgName);
+        setPrevImg(Img)
+        setImg(e.target.files[0]);
+        setImgName(e.target.files[0].name);
+    };
+    const fileUpload  = (e) =>{
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('file', Img);
+        console.log(Img,e)
+        try {
+          const res = axios
+          .post('http://localhost:4000/uploadCourseImage', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+          });
+          
+          const { imageName, imagePath } = res.data;
+        console.log('File Uploaded');
+        } catch (err) {
+        console.log('There was a problem with the server');
+        console.log(err);
+        }
+      };
+    
+    const fileUpdate  = (e) =>{
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('image', Img);
+        console.log(Img,e)
+        try {
+            const res = axios
+            .delete(`http://localhost:4000/deleteCourseImage/${PrevImg}`);
+              console.log(res);
+              try {
+                const res = axios
+                .post('http://localhost:4000/uploadCourseImage', formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  },
+                });
+                  const { imageName, imagePath } = res.data;
+                  console.log('Image Updated', imageName, imagePath);
+              } 
+              catch (err) {
+                  console.log(err);
+              }
+        }
+        catch (err) {
+            console.log(err);
+        }
+      };
+
     const addClick = () =>{
         setModalTitle("Add Course")
         setCourseID(0)
         setCourseName('')
         setInstructor('')
+        setImg('')
+        setImgName('')
     
     };
     const editClick = (course) =>{
@@ -77,6 +139,7 @@ export default function Course (props){
         setCourseID(course.ID)
         setCourseName(course.CourseName)
         setInstructor(course.InstructorID)
+        setImgName(course.Image)
     
     };
     const deleteClick = (courseID) =>{
@@ -95,16 +158,20 @@ export default function Course (props){
             })
             }
     };
-    const createClick = () =>{
+    const createClick = (e) =>{
 
         if(window.confirm('Are you sure?')){
             axios
               .post(`http://localhost:4000/addCourse`, {
                 CourseName,
-                Instructor
+                Instructor,
+                ImgName
               })
               .then((result) => {
                 console.log(result);
+                if(ImgName!=''&Img!=''){
+                    fileUpload(e)
+                }
                 getCourseList();
             } // fetching the updated list
                 ,(error)=>{
@@ -113,17 +180,23 @@ export default function Course (props){
             }
             $('#exampleModal .btn-close').click()
     };
-    const updateClick = () =>{
+    const updateClick = (e) =>{
 
         if(window.confirm('Are you sure?')){
             axios
               .put(`http://localhost:4000/updateCourse`, {
                 CourseID,
                 CourseName,
-                Instructor
+                Instructor,
+                ImgName
               })
               .then((result) => {
                 console.log(result);
+                if(ImgName!=''& Img!=''&PrevImg!=''){
+                    fileUpdate(e)
+                } else if (ImgName!=''& Img!=''){
+                    fileUpload(e)
+                };
                 getCourseList();
             } // fetching the updated list
                 ,(error)=>{
@@ -135,6 +208,8 @@ export default function Course (props){
 
     useEffect(() => {
         getCourseList();
+
+    console.log(ImgName)
     }, [props]);
     
     return (
@@ -265,34 +340,32 @@ export default function Course (props){
                                 </option>)}
                             </select>
                         </div>
-{/*                                 
-                        <div className="input-group mb-3">
-                            <span className="input-group-text">DOJ</span>
-                            <input type="date" className="form-control"
-                            value={DateOfJoining}
-                            onChange={this.changeDateOfJoining}/>
-                        </div> */}
-                                
-                                
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Course Image</span>
+                          <div class="custom-file" style={{'margin-top':'2px'}}>
+                            <input type="file" 
+                            class="custom-file-input" 
+                            id="inputGroupFile01"
+                            onChange={(e)=>onChangeImg(e)} />
+                            <label class="form-control" for="inputGroupFile01">
+                                {ImgName}</label>
+                          </div>
+                        </div>
                      </div>
-                     {/* <div className="p-2 w-50 bd-highlight">
-                         <img width="250px" height="250px"
-                         src={PhotoPath+PhotoFileName}/>
-                         <input className="m-2" type="file" onChange={this.imageUpload}/>
-                     </div> */}
+                     
                     </div>
                                 
                     {CourseID==0?
                         <button type="button"
                         className="btn btn-primary float-start"
-                        onClick={()=>createClick()}
+                        onClick={(e)=>createClick(e)}
                         >Create</button>
                         :null}
 
                         {CourseID!=0?
                         <button type="button"
                         className="btn btn-primary float-start"
-                        onClick={()=>updateClick()}
+                        onClick={(e)=>updateClick(e)}
                         >Update</button>
                         :null}
                    </div>

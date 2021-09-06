@@ -37,7 +37,8 @@ export default function Classroom(props) {
     const [InstructorID,setInstructorID] = useState(0);
     const [title,setTitle] = useState('Course Name');
     const [instructor,setInstructor] = useState('Course Instructor');
-    
+    const [CourseImage, setCourseImage] = useState('')
+    const ImagePath = '/CourseImages/'
     const getDataList = () =>{
         axios
           .get(`http://localhost:4000/classroom/${props.match.params.courseid}`)
@@ -53,6 +54,7 @@ export default function Classroom(props) {
                 setInstructorID(response[0][0].InstructorID)
                 setTitle(response[0][0].CourseName);
                 setInstructor(response[0][0].InstructorName)
+                setCourseImage(response[0][0].Image)
             }
             console.log(response);
             });
@@ -73,7 +75,7 @@ export default function Classroom(props) {
                 LectureList.map(item=>{
                     console.log(LectureList)
                     return(
-                    <div className="card" key={item.ID}>
+                    <div className="card my-2" key={item.ID}>
                     <div className="card-header mt-2 mb-2 d-flex justify-content-between">
                         <div>
                         <h5 className="card-title text-left text-bold">{item.InstructorName}</h5>
@@ -108,8 +110,10 @@ export default function Classroom(props) {
     return (
         <div>
             <div className="card w-75 p-2 m-2" style={{height:"30vh"}}>
-            <img className="card-img-top h-100" style={{backgroundSize:"cover"}} src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGxlYXJuaW5nfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
-            <div className="card-img-overlay d-flex justify-content-between">
+            <img className="card-img-top h-100" style={{backgroundSize:"cover"}} 
+            src={(CourseImage!=null)?ImagePath+CourseImage:"https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGxlYXJuaW5nfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"}
+            />
+            <div className="card-img-overlay d-flex justify-content-between" style={{"backgroundColor": "rgba(128, 128, 128,0.6)"}}>
                 <div>
                 <h5 className="card-title h1 text-left text-light">{title}</h5>
                 <p className="card-text h3 text-left text-light">{instructor}</p>
@@ -145,37 +149,6 @@ export default function Classroom(props) {
             // Lectures
             <div>
                 <Lectures/>
-                {/* {LectureList!=[]?LectureList.map(item=>{
-                console.log(LectureList)
-                return(
-                <div className="card" key={item.ID}>
-                <div className="card-header mt-2 mb-2 d-flex justify-content-between">
-                    <div>
-                    <h5 className="card-title text-left text-bold">{item.InstructorName}</h5>
-                    <p className="card-text text-left text-secondary" style={{fontSize:15}}>{item.SubmitTime}</p>
-                    </div>
-                    
-                </div>
-                <div className="card-body">
-                    <p className="card-title text-left text-bold h4 mb-3 mx-2">{item.Description}</p>
-                    {item.Notes!=null?<p className="card-title text-left">{item.Notes}</p>:null}
-                    {item.Video!=null?
-                        <iframe width="560" height="315" src={item.Video}>
-                        </iframe>:null
-                    }
-                    {item.File!=null?
-                    <div className="card w-50">
-                        <div className="card-body">
-                        <h5 className="card-title text-left text-bold">{title}</h5>
-                        </div>
-                    </div>
-                    :null}
-                </div>
-            </div>
-                )}):
-                <div>
-                <h3>No Lectures</h3>
-                </div>} */}
             </div>
             :null}
             
