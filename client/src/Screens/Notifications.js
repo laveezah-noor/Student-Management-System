@@ -91,6 +91,10 @@ export default function Notifications(props) {
                             label: 'NEW LECTURE'
                             },
                             {
+                            icon: 'bi bi-journal-check',
+                            label: 'LECTURE UPDATED'
+                            },
+                            {
                             icon: 'bi bi-journal-x',
                             label: 'DELETED LECTURE'
                             },

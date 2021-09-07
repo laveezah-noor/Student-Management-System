@@ -132,7 +132,7 @@ export default function Sidebar(props) {
         getCourse()
     }, [])
     return (
-        <div className="Sidebar sticky-bottom d-block">
+        <div className="Sidebar sticky-bottom d-block position-fixed">
             <h1 className="p-2 text-white my-3 h2 text-bold">Mentor</h1>
               
             <ul 

@@ -108,7 +108,7 @@ export default function Classroom(props) {
         getDataList()
     }, [props]);
     return (
-        <div>
+        <div className="ml-5">
             <div className="card w-75 p-2 m-2" style={{height:"30vh"}}>
             <img className="card-img-top h-100" style={{backgroundSize:"cover"}} 
             src={(CourseImage!=null)?ImagePath+CourseImage:"https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGxlYXJuaW5nfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"}

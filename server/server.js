@@ -134,15 +134,17 @@ app.put('/updateProfile', (req, res) => {
   req.body.FirstName,
   req.body.LastName,
   req.body.Email,
-  req.body.Contact)
-  const SELECT_ALL_TASKS = `
+  req.body.Contact,
+  req.body.Profile)
+  if(req.body.Profile){
+    const SELECT_ALL_TASKS = `
 	START TRANSACTION;
 		UPDATE USERS SET 
 		UserName = '${req.body.UserName}',
 		UserPassword = '${req.body.UserPassword}'
 		WHERE UserID = ${req.body.UserID} AND RoleID = ${req.body.RoleID};
 		CALL UpdateProfile('${req.body.RoleID}', '${req.body.UserID}', '${req.body.FirstName}', 
-      '${req.body.LastName}', '${req.body.Email}', '${req.body.Contact}');
+      '${req.body.LastName}', '${req.body.Email}', '${req.body.Contact}', '${req.body.Profile}');
 	COMMIT;
   `;
   connection.query(SELECT_ALL_TASKS, (err, result) => {
@@ -153,6 +155,26 @@ app.put('/updateProfile', (req, res) => {
       res.send(result);
     }
   });
+  }else{
+    const SELECT_ALL_TASKS = `
+	START TRANSACTION;
+		UPDATE USERS SET 
+		UserName = '${req.body.UserName}',
+		UserPassword = '${req.body.UserPassword}'
+		WHERE UserID = ${req.body.UserID} AND RoleID = ${req.body.RoleID};
+		CALL UpdateProfile('${req.body.RoleID}', '${req.body.UserID}', '${req.body.FirstName}', 
+      '${req.body.LastName}', '${req.body.Email}', '${req.body.Contact}', '');
+	COMMIT;
+  `;
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result)
+      res.send(result);
+    }
+  });
+  }
 });
 
 
@@ -257,9 +279,9 @@ app.post('/uploadLecture', (req, res) => {
   });
 });
 
-app.delete('/deleteLectureFile/:path',(req,res) =>{
-  console.log(req.params.path);
-  fs.unlink(req.params.path, (err) => {
+app.delete('/deleteLectureFile',(req,res) =>{
+  console.log("Path: ",req.query.path);
+  fs.unlink(req.query.path, (err) => {
     if (err) {
       console.log(err)
     }
@@ -317,6 +339,25 @@ app.delete('/deleteLecture/:id', (req, res) => {
     } else {
       res.send('deleted');
     }
+  });
+});
+
+app.post('/uploadProfileImage', (req, res) => {
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
+  }
+
+  const file = req.files.file;
+  let reqPath = path.join(__dirname, '../');//It goes 1 folders or directories back from given __dirname.
+  console.log("File:  ",file, reqPath)
+
+  file.mv(`${reqPath}client/public/ProfileImages/${file.name}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    res.json({ fileName: file.name, filePath: `/ProfileImages/${file.name}` });
   });
 });
 

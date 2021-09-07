@@ -76,8 +76,8 @@ export default function Classroom(props) {
         console.log(File,e)
         try {
             const res = axios
-            .delete(`http://localhost:4000/deleteLectureFile/${PrevFile}`);
-              console.log(res);
+            .delete(`http://localhost:4000/deleteLectureFile/path='${PrevFile}'`);
+             console.log(res);
               try {
                 const res = axios
                 .post('http://localhost:4000/uploadLecture', formData, {
@@ -101,7 +101,7 @@ export default function Classroom(props) {
         console.log(PrevFile,FilePath,File)
         try {
             const res = axios
-            .delete(`http://localhost:4000/deleteLectureFile/'${FilePath+File}'`);
+            .delete(`http://localhost:4000/deleteLectureFile/path='${FilePath+File}'`);
               console.log(res);
         }
         catch (err) {
@@ -216,7 +216,7 @@ export default function Classroom(props) {
               })
               .then((result) => {
                 console.log(result);
-                console.log(FileName,File);
+                console.log(FileName,File,PrevFile,e);
                 if(FileName!=''&File!=''&PrevFile!=''){
                   fileUpdate(e)
               } else if(FileName!=''&File!=''){
@@ -235,7 +235,7 @@ export default function Classroom(props) {
         getDataList()
     }, [props]);
     return (
-        <div>
+        <div className="ml-5">
             <div className="card w-75 p-2 m-2" style={{height:"30vh"}}>
             <img className="card-img-top h-100" style={{backgroundSize:"cover"}} 
             src={(CourseImage!=null)?ImagePath+CourseImage:"https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGxlYXJuaW5nfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"}
@@ -389,7 +389,7 @@ export default function Classroom(props) {
                     {LectureID!==0?
                         <button type="button"
                         className="btn btn-primary float-start"
-                        onClick={()=>updateClick()}
+                        onClick={(e)=>updateClick(e)}
                         >Update</button>
                         :null}
                    </div>

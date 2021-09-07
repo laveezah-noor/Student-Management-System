@@ -26,6 +26,7 @@ import Students from './Screens/Admin/Students';
 import Instructors from './Screens/Admin/Instructors';
 import MyStudents from './Screens/Instructor/MyStudents';
 import { useEffect, useState } from 'react';
+import ProfileDetails from './Screens/ProfileDetails';
 
 function App() {
 
@@ -77,6 +78,7 @@ const Student = (props) => {
       <Route exact path={`${path}/Notification`} component={Notifications} />
       <Route exact path={`${path}/MyClassroom/:courseid`} component={MyClassroom} />
       <Route exact path={`${path}/myProfile`} component={Profile} />
+      <Route exact path={`${path}/StudentDetails`} component={ProfileDetails} />
       </Switch>
       :
       (role==3)?
@@ -87,6 +89,8 @@ const Student = (props) => {
       <Route exact path={`${path}/Users`} component={Users} />
       <Route exact path={`${path}/Students`} component={Students} />
       <Route exact path={`${path}/myProfile`} component={Profile} />
+      <Route exact path={`${path}/ProfileDetails`} component={ProfileDetails} />
+      <Route exact path={`${path}/Classroom/:courseid`} component={MyClassroom} />
       </Switch>
       :
       null}

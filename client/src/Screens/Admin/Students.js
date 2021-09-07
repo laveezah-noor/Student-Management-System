@@ -3,8 +3,13 @@
 import React,{useState, useEffect} from 'react';
 import axios from 'axios';
 import $ from 'jquery';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function Students(props){
+    const history = useHistory();
+    const {state} = useLocation();
+    const user = parseInt(state.id);
+    const role = parseInt(state.role);
     const FiltersList=[
         // {label: '', value: ''},
         {label: "ID", value: "ID"},
@@ -229,6 +234,11 @@ export default function Students(props){
                         <td>{Student.Contact}</td>
                         <td>{Student.Email}</td>
                         <td>
+                        <button type="button"
+                        className="btn btn-light mr-1"
+                        onClick={()=>{history.push(`/Home/${user}/${role}/ProfileDetails`, {id: Student.ID, role:1})}}
+                        ><i class="bi bi-three-dots"></i>
+                        </button>
                         <button type="button"
                         className="btn btn-light mr-1"
                         data-bs-toggle="modal"

@@ -1,8 +1,13 @@
 import React,{useState, useEffect} from 'react';
 import axios from 'axios';
 import $ from 'jquery';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function Course (props){
+    const history = useHistory();
+    const {state} = useLocation();
+    const user = parseInt(state.id);
+    const role = parseInt(state.role);
     const [CourseList, setCourseList] = useState([]);
     const [InstructorList, setInstructorList] = useState([]);
     const [ModalTitle, setModalTitle] = useState('');
@@ -76,6 +81,7 @@ export default function Course (props){
         setImg(e.target.files[0]);
         setImgName(e.target.files[0].name);
     };
+    
     const fileUpload  = (e) =>{
         e.preventDefault();
         const formData = new FormData();
@@ -282,6 +288,11 @@ export default function Course (props){
                         <td>{course.CourseName}</td>
                         <td>{course.InstructorName}</td>
                         <td>
+                        <button type="button"
+                        className="btn btn-light mr-1"
+                        onClick={()=>{history.push(`/Home/${user}/${role}/Classroom/${course.ID}`)}}
+                        ><i class="bi bi-three-dots"></i>
+                        </button>
                         <button type="button"
                         className="btn btn-light mr-1"
                         data-bs-toggle="modal"

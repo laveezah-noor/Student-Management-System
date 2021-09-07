@@ -7,6 +7,8 @@ export default function Profile(props) {
     const UserID = parseInt(state.id);
     const RoleID = parseInt(state.role)
     const ImagePath = '/ProfileImages/'
+    const [Img,setImg] = useState('')
+    const [PrevImg,setPrevImg] = useState('')
     const [UserName,setUserName] = useState('');
     const [UserPassword,setUserPassword] = useState('');
     const [FirstName,setFirstName] = useState('');
@@ -30,6 +32,35 @@ export default function Profile(props) {
           setProfile(response[0][0].Profile)
         })
     };
+    
+    const onChangeImg = e => {
+        console.log(Profile);
+        setPrevImg(Img)
+        setImg(e.target.files[0]);
+        setProfile(e.target.files[0].name);
+    };
+    
+    const fileUpload  = () =>{
+        // e.preventDefault();
+        const formData = new FormData();
+        formData.append('file', Img);
+        console.log(Img)
+        try {
+          const res = axios
+          .post('http://localhost:4000/uploadProfileImage', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+          });
+          
+          const { imageName, imagePath } = res.data;
+        console.log('File Uploaded');
+        } catch (err) {
+        console.log('There was a problem with the server');
+        console.log(err);
+        }
+      };
+    
     const updateClick = () =>{
         console.log(UserID,
             RoleID,
@@ -55,6 +86,9 @@ export default function Profile(props) {
               })
               .then((result) => {
                 console.log(result);
+                if(Profile!=''&Img!=''){
+                    fileUpload()
+                }
                 getData();
             } // fetching the updated list
                 ,(error)=>{
@@ -134,11 +168,25 @@ export default function Profile(props) {
 
 
                         </div>
-                        {/* <div className="p-2 w-50 bd-highlight">
-                            <img width="250px" height="250px"
-                            src={PhotoPath+PhotoFileName}/>
-                            <input className="m-2" type="file" onChange={this.imageUpload}/>
-                        </div> */}
+                        <div className="p-2 w-50 bd-highlight">
+                        {/* {Profile?
+                        <img width="250px" height="250px"
+                        src={ImagePath+Profile}/>
+                        :null
+                        }     */}
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Profile Image</span>
+                          <div class="custom-file" style={{'margin-top':'2px'}}>
+                            <input type="file" 
+                            class="custom-file-input" 
+                            id="inputGroupFile01"
+                            onChange={(e)=>onChangeImg(e)} 
+                            />
+                            <label class="form-control" for="inputGroupFile01">
+                                {Profile}</label>
+                          </div>
+                        </div>
+                        </div>
                         </div>
                         <div className="d-flex justify-content-around">
                         <button type="button"
@@ -159,7 +207,7 @@ export default function Profile(props) {
             <img className="card-img-top" style={{backgroundSize:"cover", height:"200px"}} src="https://images.unsplash.com/photo-1542137722061-efd1cbdf156c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80"/>
             <div>
                 <img 
-                className="w-25" 
+                className="w-25 rounded-circle" 
                 // style={{position:'absolute', top:120, left:130, border: "150px"}} 
                 src={(Profile!=null)?ImagePath+Profile:"https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"}
                 />
