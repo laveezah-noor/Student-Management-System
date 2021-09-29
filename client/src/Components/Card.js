@@ -58,7 +58,7 @@ function Card(params) {
               <p class="price">$250</p>
             </div> */}
 
-            <h3 className="text-left"><a href="course-details.html">{CourseName}</a></h3>
+            <h3 className="text-left"><a>{CourseName}</a></h3>
             <p>{CourseDetail}</p>
             <div class="trainer d-flex justify-content-between align-items-center">
               <div class="trainer-profile d-flex align-items-center">

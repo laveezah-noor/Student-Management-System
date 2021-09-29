@@ -22,7 +22,7 @@ export default function Login(props) {
             }
             if(response.loggedIn){
                 if(response.role==1){
-                    window.location.pathname = `/Student/${response.user}/${response.role}`
+                    window.location.pathname = `/Home/${response.user}/${response.role}`
                 } else if(response.role==2) {
 
                 }
