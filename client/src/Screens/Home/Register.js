@@ -27,8 +27,10 @@ const Trainer = ({status}) => {
     const [LastName,setLastName] = React.useState('')
     const [Email,setEmail] = React.useState('')
     const [Contact,setContact] = React.useState('')
+    const [Message, setMessage] = React.useState('')
     const Role = 2;
     const onSubmit = () =>{
+        if (UserName != '' && UserPassword != '' && FirstName != ''){
         axios
               .post(`http://localhost:4000/addUser`, {
                 UserName,
@@ -42,42 +44,57 @@ const Trainer = ({status}) => {
               .then((result) => result.data)
               .then((result)=>{
                 console.log(result);
-                alert(result);
-                window.location.pathname = '/login'
+                if (result.code == 1062){
+                    setMessage(result.type+' not available')
+                } else {
+                    setMessage('')
+                    alert(result)
+                    window.location.pathname = '/login'
+                
+                }
+                
                 // getUserList();
                 // $('#exampleModal .btn-close').click()
             } // fetching the updated list
                 ,(error)=>{
                 alert('Failed');
                 // $('#exampleModal .btn-close').click()
-            })
+            })} else {
+                setMessage('Fill the required fields')
+            }
     }
     console.log(cls)
     return(
-        <div className={`signin-form ${cls}`} >
+        <div className={`signin-form needs-validation ${cls}`} novalidate>
             <h2 className="form-title">Be a Trainer</h2>
-            <div className="register-form" >
+            <div className="register-form">
                 <div className="form-group">
                     <label for="username"><i className="zmdi zmdi-account material-icons-name"></i></label>
                     <input type="text" name="username" 
-                    placeholder="User Name"
+                    placeholder="*UserName"
                     value={UserName}
-                    onChange={(e)=>setUserName(e.target.value)}/>
+                    onChange={(e)=>setUserName(e.target.value)}
+                    required/>
+                    <div class="invalid-feedback">
+                        You must agree before submitting.
+                      </div>
                 </div>
                 <div className="form-group">
                     <label for="your_pass"><i className="zmdi zmdi-lock"></i></label>
                     <input type="password" name="your_pass" 
-                    placeholder="Password"
+                    placeholder="*Password"
                     value={UserPassword}
-                    onChange={(e)=>setUserPassword(e.target.value)}/>
+                    onChange={(e)=>setUserPassword(e.target.value)}
+                    required/>
         
                 </div>
 	    		<div className="form-group">
                     <label for="firstname"><i className="zmdi zmdi-account material-icons-name"></i></label>
                     <input type="text" name="firstname"
-                    placeholder="First Name"
+                    placeholder="*First Name"
                     value={FirstName}
-                    onChange={(e)=>setFirstName(e.target.value)}/>
+                    onChange={(e)=>setFirstName(e.target.value)}
+                    required/>
                 </div>
 	    			<div className="form-group">
                     <label for="lastname"><i className="zmdi zmdi-account material-icons-name"></i></label>
@@ -100,17 +117,16 @@ const Trainer = ({status}) => {
                     value={Contact}
                     onChange={(e)=>setContact(e.target.value)}/>
                 </div>
-
-	    		 {/* <div className="form-holder">
-	    	<span className="lnr lnr-phone-handset"></span>
-	    	<input type="text" className="form-control" placeholder="Phone Number"/>
-	            </div> */}
+                {(Message!= '' && Message!= 'Login Successfully' )?
+                            <div class="alert alert-danger" role="alert">{Message}</div>
+                            :null}
                 <div className="form-group">
-                    <input type="checkbox" name="remember-me" className="agree-term" />
+                    {/* <input type="checkbox" name="remember-me" className="agree-term" />
                     <label for="remember-me" className="label-agree-term"><span><span></span></span>Remember me</label>
                 </div>
-                <div className="form-group form-button">
-                    <button type="submit" onClick={()=>onSubmit()} name="signin" className="form-submit btn">Sign in</button>
+                <div className="form-group form-button"> */}
+                    <button type="submit"  onClick={()=>onSubmit()}
+                    name="signin" className="form-submit btn">Sign in</button>
                 </div>
             </div>
             {/* <div className="social-login">
@@ -134,8 +150,10 @@ const Student = ({status}) => {
     const [LastName,setLastName] = React.useState('')
     const [Email,setEmail] = React.useState('')
     const [Contact,setContact] = React.useState('')
+    const [Message, setMessage] = React.useState('')
     const Role = 1;
     const onSubmit = () =>{
+        if (UserName != '' && UserPassword != '' && FirstName != ''){
         axios
               .post(`http://localhost:4000/addUser`, {
                 UserName,
@@ -149,42 +167,54 @@ const Student = ({status}) => {
               .then((result) => result.data)
               .then((result)=>{
                 console.log(result);
-                alert(result);
-                window.location.pathname = '/login'
+                if (result.code == 1062){
+                        setMessage(result.type+' not available')
+                } else {
+                    setMessage('')
+                    alert(result)
+                    window.location.pathname = '/login'
+                
+                }
+                
                 // getUserList();
                 // $('#exampleModal .btn-close').click()
             } // fetching the updated list
                 ,(error)=>{
                 alert('Failed');
                 // $('#exampleModal .btn-close').click()
-            })
+            })} else {
+                setMessage('Fill the required fields')
+            }
     }
     console.log(cls)
     return(
-        <div className={`signin-form ${cls}`} >
+        <div className={`signin-form needs-validation ${cls}`} novalidate>
         <h2 className="form-title">Be a Student</h2>
             <div className="register-form" >
                 <div className="form-group">
                     <label for="username"><i className="zmdi zmdi-account material-icons-name"></i></label>
                     <input type="text" name="username" 
-                    placeholder="User Name"
+                    placeholder="*UserName"
                     value={UserName}
-                    onChange={(e)=>setUserName(e.target.value)}/>
+                    onChange={(e)=>setUserName(e.target.value)}
+                    required/>
                 </div>
                 <div className="form-group">
                     <label for="your_pass"><i className="zmdi zmdi-lock"></i></label>
                     <input type="password" name="your_pass" 
-                    placeholder="Password"
+                    placeholder="*Password"
                     value={UserPassword}
-                    onChange={(e)=>setUserPassword(e.target.value)}/>
+                    onChange={(e)=>setUserPassword(e.target.value)}
+                    required/>
         
                 </div>
 	    		<div className="form-group">
                     <label for="firstname"><i className="zmdi zmdi-account material-icons-name"></i></label>
                     <input type="text" name="firstname"
-                    placeholder="First Name"
+                    placeholder="*First Name"
                     value={FirstName}
-                    onChange={(e)=>setFirstName(e.target.value)}/>
+                    onChange={(e)=>setFirstName(e.target.value)}
+                    required/>
                 </div>
 	    			<div className="form-group">
                     <label for="lastname"><i className="zmdi zmdi-account material-icons-name"></i></label>
@@ -207,17 +237,12 @@ const Student = ({status}) => {
                     value={Contact}
                     onChange={(e)=>setContact(e.target.value)}/>
                 </div>
-
-	    		 {/* <div className="form-holder">
-	    	<span className="lnr lnr-phone-handset"></span>
-	    	<input type="text" className="form-control" placeholder="Phone Number"/>
-	            </div> */}
-                <div className="form-group">
-                    <input type="checkbox" name="remember-me" className="agree-term" />
-                    <label for="remember-me" className="label-agree-term"><span><span></span></span>Remember me</label>
-                </div>
+                {(Message!= '' && Message!= 'Login Successfully' )?
+                            <div class="alert alert-danger" role="alert">{Message}</div>
+                            :null}
                 <div className="form-group form-button">
-                    <button type="submit" onClick={()=>onSubmit()} name="signin" className="form-submit btn">Sign in</button>
+                    <button type="submit"  onClick={()=>onSubmit()}
+                    name="signin" className="form-submit btn">Sign in</button>
                 </div>
             </div>
             {/* <div className="social-login">

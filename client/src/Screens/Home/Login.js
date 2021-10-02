@@ -16,17 +16,12 @@ export default function Login(props) {
         .then((response) => response.data)
         .then((response) => {
             console.log(response)
-            if(response.message){
-                setMessage(response.message)
+            if(response.msg != null){
+                setMessage(response.msg)
                 console.log(Message)
-            }
-            if(response.loggedIn){
-                if(response.role==1){
-                    window.location.pathname = `/Home/${response.user}/${response.role}`
-                } else if(response.role==2) {
-
-                }
-                
+            } 
+            if (response.roleID && response.userID){
+                window.location.pathname = `/Home/${response.userID}/${response.roleID}`
             }
         });
         
@@ -74,13 +69,9 @@ export default function Login(props) {
                                 <input value={Password} onChange={(e)=>setPassword(e.target.value)} 
                                 type="password" name="your_pass" id="your_pass" placeholder="Password"/>
                             </div>
-                            {(Message!='')?
+                            {(Message!= '' && Message!= 'Login Successfully' )?
                             <div class="alert alert-danger" role="alert">{Message}</div>
                             :null}
-                            <div className="form-group">
-                                <input type="checkbox" name="remember-me" id="remember-me" className="agree-term" />
-                                <label className="label-agree-term"><span><span></span></span>Remember me</label>
-                            </div>
                             <div className="form-group form-button">
                                 <input onClick={()=>getData()}
                                  type="button" name="signin" id="signin" className="form-submit" value="Log in"/>

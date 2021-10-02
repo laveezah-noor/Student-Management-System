@@ -67,25 +67,27 @@ app.post('/login', (req, res) => {
   const UserName = req.body.UserName;
   const Password = req.body.Password;
   const SELECT_ALL_TASKS = `
-  SELECT * FROM USERS
-   WHERE UserName = '${UserName}' AND UserPassword = '${Password}';
+  CALL Login('${UserName}','${Password}',@Result, @ID, @Role);
+  SELECT @Result;
+  SELECT @ID;
+  SELECT @Role;
   `;
   connection.query(SELECT_ALL_TASKS, (err, result) => {
     if (err) {
       console.log(err);
-    } 
-    if(result.length>0){
-      req.session.loggedIn = true;
-      req.session.user = result;
-      console.log(result);
-      let data = {
-        loggedIn:req.session.loggedIn,
-        user:req.session.user[0].UserID,
-        role:req.session.user[0].RoleID}
-      console.log(data);
-      res.send(data)
     } else {
-      res.send({message:"Wrong UserName or Password"})
+      let msg = result[1][0]['@Result']
+      let userID = result[2][0]['@ID']
+      let roleID = result[3][0]['@Role']
+      console.log(result)
+      console.log(msg,userID,roleID)
+      let data = {
+        msg: msg,
+        userID: userID,
+        roleID: roleID
+      }
+      console.log(data)
+      res.send(data);
     }
   });
 });
@@ -603,18 +605,38 @@ app.post('/addUser', (req, res) => {
   (${req.body.Role},'${req.body.UserName}','${req.body.UserPassword}','${req.body.FirstName}','${req.body.LastName}','${req.body.Email}','${req.body.Contact}')
   `;
   console.log(ADD_TASK, `add user`);
-  connection.query(ADD_TASK, (err) => {
+  connection.query(ADD_TASK, (err,result) => {
     if (err) {
       console.log(err);
+      console.log(err.sqlMessage)
+      if (err.errno == 1062){
+        let msg = err.sqlMessage
+        let no = msg.search('USERS')
+        let type = msg.slice(no+6,-1)
+        console.log(type)
+        let data = {
+          code : err.errno,
+          type: type
+        }
+        res.send(data)
+      } else {
+        console.log(err)
+      }
+      
     } else {
       res.send('User Added');
     }
   });
 });
 
-app.delete('/instructor/:instructorid', (req, res) => {
-  const DELETE_TASK = `DELETE FROM INSTRUCTOR WHERE (ID = ${req.params.instructorid});`;
-  connection.query(DELETE_TASK, (err, result) => {
+app.delete('/deleteUser', (req, res) => {
+  // console.log(req.query)
+  // res.send(req.query)
+  let id = parseInt(req.query.id)
+  let role = parseInt(req.query.role)
+  console.log(id,role)
+  const DELETE_USER = `CALL DeleteUser(${id},${role});`;
+  connection.query(DELETE_USER, (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -622,6 +644,17 @@ app.delete('/instructor/:instructorid', (req, res) => {
     }
   });
 });
+
+app.delete('/instructor/:instructorid',(req, res)=>{
+    const DELETE_TASK = `DELETE FROM INSTRUCTOR WHERE (ID = ${req.params.instructorid});`;
+  connection.query(DELETE_TASK, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send('deleted');
+    }
+  });
+})
 
 app.put('/updateInstructor', (req, res) => {
   const UPDATE_COURSE = `UPDATE INSTRUCTOR SET FirstName = '${req.body.FirstName}', LastName = '${req.body.LastName}', Contact = '${req.body.Contact}', Email = '${req.body.Email}' WHERE ID = ${req.body.InstructorID};`;
