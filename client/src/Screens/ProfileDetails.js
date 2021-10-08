@@ -48,7 +48,7 @@ export default function ProfileDetails(props) {
                 </div>
                 <div className="card-body d-flex">
                     <div className="d-flex flex-row bd-highlight mb-3 col-7">
-                        <div className="p-2 w-50 bd-highlight">
+                        <div className="p-2 w-75 bd-highlight">
                            <div className="input-group mb-3">
                                <span className="input-group-text">First Name</span>
                                <input type="text" className="form-control"

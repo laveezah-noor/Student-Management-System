@@ -62,7 +62,7 @@ export default function Classroom(props) {
     }
     const Leave = () =>{
         axios
-        .delete(`http://localhost:4000/leavecourse/${props.match.params.user}`)
+        .delete(`http://localhost:4000/leavecourse/${props.match.params.user}/${CourseID}`)
         .then((response) => response.data)
           .then((response) => {
               console.log(response)

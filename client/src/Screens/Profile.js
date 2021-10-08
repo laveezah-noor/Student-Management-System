@@ -17,6 +17,8 @@ export default function Profile(props) {
     const [Contact,setContact] = useState('');
     const [Profile,setProfile] = useState('');
     const Role = (RoleID==1)? 'Student': (RoleID==2)? 'Instructor' : (RoleID==3)? 'Admin': null 
+    const [Message, setMessage] = React.useState('')
+    const [EmailStatus, setEmailStatus] = React.useState(true)
     const getData = () =>{
         axios
         .get(`http://localhost:4000/profile/${RoleID}/${UserID}`)
@@ -60,7 +62,22 @@ export default function Profile(props) {
         console.log(err);
         }
       };
-    
+      const validateEmail = (email) => {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+    const validate = (value) =>{
+        setEmail(value)
+        if (Email != ''){
+            if(validateEmail(Email)){
+                setEmailStatus(true)
+                setMessage('')
+            } else {
+                setEmailStatus(false)
+                setMessage('Email Address not valid')
+            }
+        }
+    }
     const updateClick = () =>{
         console.log(UserID,
             RoleID,
@@ -71,6 +88,7 @@ export default function Profile(props) {
             Email,
             Contact,
             Profile);
+        if (EmailStatus != false){   
         if(window.confirm('Are you sure?')){
             axios
               .put(`http://localhost:4000/updateProfile`, {
@@ -95,6 +113,9 @@ export default function Profile(props) {
                 alert('Failed');
             })
         };
+        }else{
+            alert(Message)
+        }
     }
     const LogoutClick = () =>{
         window.location.pathname = ''
@@ -106,9 +127,9 @@ export default function Profile(props) {
     
     return (
         <div 
-        className="d-flex justify-content-around my-5"
+        className="d-flex justify-content-around m-5"
         >
-            <div className="card w-50 p-2 m-2">
+            <div className="card w-75 p-2 m-2">
                 <div className="card-header mt-2 mb-2 d-flex justify-content-between">
                 <h5 className="modal-title">My Profile</h5>
                 </div>
@@ -133,7 +154,7 @@ export default function Profile(props) {
                                <span className="input-group-text">Email</span>
                                <input type="email" className="form-control"
                                value={Email}
-                               onChange={(e)=>setEmail(e.target.value)}/>
+                               onChange={(e)=>validate(e.target.value)}/>
                            </div>
 
                            <div className="input-group mb-3">

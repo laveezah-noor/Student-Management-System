@@ -2,6 +2,19 @@
   display: none;
 }
 
+
+input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=search-md]:focus:not([readonly]), input[type=search]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=url]:focus:not([readonly]), textarea.md-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid #4285F4;
+  box-shadow: 0 1px 0 0 #4285F4;
+  /* background-color: #4285F4; */
+}
+
+input.notValidate{
+  border-bottom: 1px solid red;
+  box-shadow: 0 1px 0 0 red;
+  /* background-color: red; */
+}
+
 /* @extend display-flex; */
 display-flex, .display-flex, .display-flex-center, .signup-content, .signin-content, .social-login, .socials {
   display: flex;

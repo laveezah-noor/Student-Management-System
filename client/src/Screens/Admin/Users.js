@@ -14,6 +14,7 @@ export default function Users(props){
     const [RoleList, setRoleList] = useState([]);
     const [ModalTitle, setModalTitle] = useState('');
     const [UserID, setUserID] = useState(0);
+    const [RoleID, setRoleID] = useState(0);
     const [UserName, setUserName] = useState('');
     const [UserPassword, setUserPassword] = useState('');
     const [Role, setRole] = useState('');
@@ -84,8 +85,13 @@ export default function Users(props){
         setModalTitle("Edit User")
         setUserName(User.UserName);
         setUserPassword(User.UserPassword);
-        setRole(User.Role);
-        setUserID(User.ID)
+        setRoleID(User.RoleID);
+        setUserID(User.UserID)
+        setFirstName(User.FirstName);
+        setLastName(User.LastName);
+        setContact(User.Contact);
+        setEmail(User.Email);
+        console.log(UserID,Role)
     };
     const deleteClick = (UserID,RoleID) =>{
         console.log(UserID,RoleID)
@@ -129,14 +135,18 @@ export default function Users(props){
             
     };
     const updateClick = () =>{
-
+        console.log(UserID,RoleID)
         if(window.confirm('Are you sure?')){
             axios
               .put(`http://localhost:4000/updateUser`, {
                 UserID,
+                RoleID,
                 UserName,
                 UserPassword,
-                Role
+                FirstName,
+                LastName,
+                Contact,
+                Email
               })
               .then((result) => {
                 console.log(result);

@@ -28,38 +28,53 @@ const Trainer = ({status}) => {
     const [Email,setEmail] = React.useState('')
     const [Contact,setContact] = React.useState('')
     const [Message, setMessage] = React.useState('')
+    const [EmailStatus, setEmailStatus] = React.useState(true)
     const Role = 2;
+    const validateEmail = (email) => {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+    const validate = (value) =>{
+        setEmail(value)
+        if (Email != ''){
+            if(validateEmail(Email)){
+                setEmailStatus(true)
+                setMessage('')
+            } else {
+                setEmailStatus(false)
+                setMessage('Email Address not valid')
+            }
+        }
+    }
     const onSubmit = () =>{
         if (UserName != '' && UserPassword != '' && FirstName != ''){
-        axios
-              .post(`http://localhost:4000/addUser`, {
-                UserName,
-                UserPassword,
-                Role,
-                FirstName,
-                LastName,
-                Contact,
-                Email
+            if (EmailStatus != false){
+                axios
+                .post(`http://localhost:4000/addUser`, {
+                  UserName,
+                  UserPassword,
+                  Role,
+                  FirstName,
+                  LastName,
+                  Contact,
+                  Email
+                })
+                .then((result) => result.data)
+                .then((result)=>{
+                  console.log(result);
+                  if (result.code == 1062){
+                      setMessage(result.type+' not available')
+                  } else {
+                      setMessage('')
+                      alert(result)
+                      window.location.pathname = '/login'
+                  
+                  }
+              }
+                  ,(error)=>{
+                  alert('Failed');
               })
-              .then((result) => result.data)
-              .then((result)=>{
-                console.log(result);
-                if (result.code == 1062){
-                    setMessage(result.type+' not available')
-                } else {
-                    setMessage('')
-                    alert(result)
-                    window.location.pathname = '/login'
-                
-                }
-                
-                // getUserList();
-                // $('#exampleModal .btn-close').click()
-            } // fetching the updated list
-                ,(error)=>{
-                alert('Failed');
-                // $('#exampleModal .btn-close').click()
-            })} else {
+            }} else {
                 setMessage('Fill the required fields')
             }
     }
@@ -70,7 +85,7 @@ const Trainer = ({status}) => {
             <div className="register-form">
                 <div className="form-group">
                     <label for="username"><i className="zmdi zmdi-account material-icons-name"></i></label>
-                    <input type="text" name="username" 
+                    <input type="text" name="username" id="username"
                     placeholder="*UserName"
                     value={UserName}
                     onChange={(e)=>setUserName(e.target.value)}
@@ -105,10 +120,10 @@ const Trainer = ({status}) => {
                 </div>
 	    				<div className="form-group">
                     <label for="email"><i className="zmdi zmdi-email"></i></label>
-                    <input type="email" name="email" 
+                    <input type="email" name="email" className={EmailStatus?"":"notValidate"}
                     placeholder="Email"
                     value={Email}
-                    onChange={(e)=>setEmail(e.target.value)}/>
+                    onChange={(e)=>validate(e.target.value)}/>
                 </div>
                 <div className="form-group">
                     <label for="phone"><i className="zmdi zmdi-email"></i></label>
@@ -121,10 +136,6 @@ const Trainer = ({status}) => {
                             <div class="alert alert-danger" role="alert">{Message}</div>
                             :null}
                 <div className="form-group">
-                    {/* <input type="checkbox" name="remember-me" className="agree-term" />
-                    <label for="remember-me" className="label-agree-term"><span><span></span></span>Remember me</label>
-                </div>
-                <div className="form-group form-button"> */}
                     <button type="submit"  onClick={()=>onSubmit()}
                     name="signin" className="form-submit btn">Sign in</button>
                 </div>
@@ -151,38 +162,53 @@ const Student = ({status}) => {
     const [Email,setEmail] = React.useState('')
     const [Contact,setContact] = React.useState('')
     const [Message, setMessage] = React.useState('')
+    const [EmailStatus, setEmailStatus] = React.useState(true)
     const Role = 1;
+    const validateEmail = (email) => {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+    const validate = (value) =>{
+        setEmail(value)
+        if (Email != ''){
+            if(validateEmail(Email)){
+                setEmailStatus(true)
+                setMessage('')
+            } else {
+                setEmailStatus(false)
+                setMessage('Email Address not valid')
+            }
+        }
+    }
     const onSubmit = () =>{
         if (UserName != '' && UserPassword != '' && FirstName != ''){
-        axios
-              .post(`http://localhost:4000/addUser`, {
-                UserName,
-                UserPassword,
-                Role,
-                FirstName,
-                LastName,
-                Contact,
-                Email
+            if (EmailStatus != false){
+                axios
+                .post(`http://localhost:4000/addUser`, {
+                  UserName,
+                  UserPassword,
+                  Role,
+                  FirstName,
+                  LastName,
+                  Contact,
+                  Email
+                })
+                .then((result) => result.data)
+                .then((result)=>{
+                  console.log(result);
+                  if (result.code == 1062){
+                      setMessage(result.type+' not available')
+                  } else {
+                      setMessage('')
+                      alert(result)
+                      window.location.pathname = '/login'
+                  
+                  }
+              }
+                  ,(error)=>{
+                  alert('Failed');
               })
-              .then((result) => result.data)
-              .then((result)=>{
-                console.log(result);
-                if (result.code == 1062){
-                        setMessage(result.type+' not available')
-                } else {
-                    setMessage('')
-                    alert(result)
-                    window.location.pathname = '/login'
-                
-                }
-                
-                // getUserList();
-                // $('#exampleModal .btn-close').click()
-            } // fetching the updated list
-                ,(error)=>{
-                alert('Failed');
-                // $('#exampleModal .btn-close').click()
-            })} else {
+            }} else {
                 setMessage('Fill the required fields')
             }
     }
@@ -228,7 +254,7 @@ const Student = ({status}) => {
                     <input type="email" name="email" 
                     placeholder="Email"
                     value={Email}
-                    onChange={(e)=>setEmail(e.target.value)}/>
+                    onChange={(e)=>validate(e.target.value)}/>
                 </div>
                 <div className="form-group">
                     <label for="phone"><i className="zmdi zmdi-email"></i></label>

@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const connection = sql.createConnection({
   // host: 'localhost',
-  user: 'root',
-  password: 'Allan.3048',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
   database: 'classroomsystem',
   multipleStatements: true});
 

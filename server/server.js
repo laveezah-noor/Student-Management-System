@@ -131,7 +131,7 @@ app.get('/profile/:role/:id', (req, res) => {
 app.put('/updateProfile', (req, res) => {
   console.log("result: ",req.body.UserID,
   req.body.RoleID,
-  req.body.UserName,
+  req.body.UserName,  
   req.body.UserPassword,
   req.body.FirstName,
   req.body.LastName,
@@ -180,6 +180,34 @@ app.put('/updateProfile', (req, res) => {
 });
 
 
+app.put('/updateUser', (req, res) => {
+  console.log("result: ",req.body.UserID,
+  req.body.RoleID,
+  req.body.UserName,  
+  req.body.UserPassword,
+  req.body.FirstName,
+  req.body.LastName,
+  req.body.Email,
+  req.body.Contact,
+  req.body.Profile)
+  const SELECT_ALL_TASKS = `
+	START TRANSACTION;
+		UPDATE USERS SET 
+		UserName = '${req.body.UserName}',
+		UserPassword = '${req.body.UserPassword}'
+		WHERE UserID = ${req.body.UserID} AND RoleID = ${req.body.RoleID};
+	COMMIT;
+  `;
+  connection.query(SELECT_ALL_TASKS, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result)
+      res.send(result);
+    }
+  });
+  
+});
 
 app.get('/dashboard/:role/:id', (req, res) => {
   const role = req.params.role;
@@ -223,8 +251,8 @@ app.get('/classroom/:courseid', (req, res) => {
   });
 });
 
-app.delete('/leavecourse/:id', (req, res) => {
-  const DELETE_TASK = `DELETE FROM COURSE_STUDENT WHERE StudentID= ${req.params.id};`;
+app.delete('/leavecourse/:id/:course', (req, res) => {
+  const DELETE_TASK = `DELETE FROM COURSE_STUDENT WHERE StudentID= ${req.params.id} AND CourseID=${req.params.course};`;
   connection.query(DELETE_TASK, (err, result) => {
     if (err) {
       console.log(err);
@@ -636,6 +664,7 @@ app.delete('/deleteUser', (req, res) => {
   let role = parseInt(req.query.role)
   console.log(id,role)
   const DELETE_USER = `CALL DeleteUser(${id},${role});`;
+  console.log(DELETE_USER)
   connection.query(DELETE_USER, (err, result) => {
     if (err) {
       console.log(err);

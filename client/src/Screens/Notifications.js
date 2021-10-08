@@ -116,6 +116,20 @@ export default function Notifications(props) {
                             },
                                 
                         ]
+                        function dateToYMD(date) {
+                            var strArray=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                            var d = date.getDate();
+                            var m = strArray[date.getMonth()];
+                            var y = date.getFullYear();
+                            var today = `${new Date().getDate}`
+                            if(d==new Date().getDate() && date.getMonth()==new Date().getMonth() && y==new Date().getFullYear() ){
+                                console.log(d,m,y,)
+                                return 'Today'
+                            } else {
+                                return '' + (d <= 9 ? '0' + d : d) + '-' + m + '-' + y;
+                            }
+                        }
+                        console.log(dateToYMD(new Date(item.CreatedTime)))         
                         return(
                             <tr className="row m-2">
                                 <td className="col-1">
@@ -131,7 +145,7 @@ export default function Notifications(props) {
                                 </td>
                                 {/* <td className="col">{item.Action}</td> */}
                                 <td className="text-left col">{item.Message}</td>
-                                <td className="col">{item.CreatedTime}</td>
+                                <td className="col">{dateToYMD(new Date(item.CreatedTime))}</td>
                                 
                             </tr>
                         )}

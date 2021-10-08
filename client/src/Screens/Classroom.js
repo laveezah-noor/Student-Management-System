@@ -268,12 +268,27 @@ export default function Classroom(props) {
                 &nbsp;&nbsp;Add New Lecture
                 </button>
                 {LectureList.map(item=>{
+                  function dateToYMD(date) {
+                    var strArray=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    var d = date.getDate();
+                    var m = strArray[date.getMonth()];
+                    var y = date.getFullYear();
+                    var today = `${new Date().getDate}`
+                    if(d==new Date().getDate() && date.getMonth()==new Date().getMonth() && y==new Date().getFullYear() ){
+                        console.log(d,m,y,)
+                        return 'Today'
+                    } else {
+                        return '' + (d <= 9 ? '0' + d : d) + '-' + m + '-' + y;
+                    }
+                }
+                console.log(dateToYMD(new Date(item.SubmitTime)))         
+                
                 return(
                 <div className="card my-2" key={item.ID}>
                 <div className="card-header mt-2 mb-2 d-flex justify-content-between">
                     <div>
                     <h5 className="card-title text-left text-bold">{item.InstructorName}</h5>
-                    <p className="card-text text-left text-secondary" style={{fontSize:15}}>{item.SubmitTime}</p>
+                    <p className="card-text text-left text-secondary" style={{fontSize:15}}>{dateToYMD(new Date(item.SubmitTime))}</p>
                     </div>
                     
            
@@ -291,8 +306,8 @@ export default function Classroom(props) {
                 </div>
                 <div className="card-body">
                     <p className="card-title text-left text-bold h4 mb-3 mx-2">{item.Description}</p>
-                    {(item.Notes!=null&item.Notes!='')?<p className="card-title text-left">{item.Notes}</p>:null}
-                    {(item.Video!=null&item.Video!='')?
+                    {(item.Notes!=null && item.Notes!='')?<p className="card-title text-left">{item.Notes}</p>:null}
+                    {(item.Video!=null && item.Video!='')?
                         <iframe width="560" height="315" src={item.Video}>
                         </iframe>:null
                     }
