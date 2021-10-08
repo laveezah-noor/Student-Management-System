@@ -198,7 +198,7 @@ export default function Instructor (props){
                         <i className="bi bi-plus" style={{fontSize:"30px"}}></i>
                     </button>
                     </div>
-            <table className="table table-striped">
+            <table className="table table-striped t-margin">
             <thead>
             <tr>
                 <th>

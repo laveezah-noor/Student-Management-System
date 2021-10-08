@@ -13,8 +13,7 @@ body{
 }
 
 .Screens{
-  /* width: 90%; */
-  margin-left: 210px;
+  padding-left: 210px;
 }
 
 .Sidebar{
@@ -61,6 +60,10 @@ body{
 .row #title{
   flex: 80%;
   width: 20px;
+}
+
+.t-margin{
+  margin: 0 .9rem
 }
 
 /**

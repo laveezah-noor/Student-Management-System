@@ -2,10 +2,10 @@ const sql = require('mysql2');
 require('dotenv').config();
 
 const connection = sql.createConnection({
-  host: 'localhost',
-  user: 'user',
+  // host: 'localhost',
+  user: 'root',
   password: 'Allan.3048',
-  database: 'ClassroomSystem',
+  database: 'classroomsystem',
   multipleStatements: true});
 
 module.exports = connection;

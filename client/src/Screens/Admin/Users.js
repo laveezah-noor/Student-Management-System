@@ -157,8 +157,6 @@ export default function Users(props){
         <div>
             <h3 className="mt-3 mb-2 mx-5">User List</h3>
             <div className="d-flex flex-row mx-5">
-
-
             <input className="form-control m-2"
                     onChange={(e)=>Search(e.target.value)}
                     // value={Search}
@@ -195,26 +193,26 @@ export default function Users(props){
                         <i className="bi bi-plus" style={{fontSize:"30px"}}></i>
                     </button>
                     </div>
-            <table className="table table-striped">
+            <table className="table table-striped t-margin">
             <thead>
             <tr>
                 <th>
                     User Id
                 </th>
                 <th>
-                    User Name
+                    Full Name
+                </th>
+                <th>
+                    Username
 
                 </th>
                 <th>
-                    User Password
+                    Password
 
                 </th>
                 <th>
                     Role
                 </th>
-                {/* <th>
-                    Email
-                </th> */}
                 <th>
                     Options
                 </th>
@@ -224,10 +222,10 @@ export default function Users(props){
                 {UserList.map(User=>
                     <tr key={User.UserID}>
                         <td>{User.UserID}</td>
+                        <td>{User.FirstName} {User.LastName}</td>
                         <td>{User.UserName}</td>
                         <td>{User.UserPassword}</td>
                         <td>{User.Role}</td>
-                        {/* <td>{User.Email}</td> */}
                         <td>
                         <button type="button"
                         className="btn btn-light mr-1"

@@ -19,17 +19,15 @@ import Courses from './Screens/AllCourses';
 import Profile from './Screens/Profile';
 import Notifications from './Screens/Notifications';
 import SideBar from './Components/Sidebar';
-import axios from 'axios';
 import AllCourses from './Screens/Admin/Courses';
 import Users from './Screens/Admin/Users';
 import Students from './Screens/Admin/Students';
 import Instructors from './Screens/Admin/Instructors';
 import MyStudents from './Screens/Instructor/MyStudents';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ProfileDetails from './Screens/ProfileDetails';
 
 function App() {
-
   return (
     <div className="App"> 
     <Router>
@@ -37,11 +35,10 @@ function App() {
       <Route exact path={'/'} component={Home}/>
       <Route path={`/courses`} component={Course} />
       <Route path={`/trainer`} component={Instructor} />
-      <Route path={'/Home/:user/:role'} component={Student}/>
+      <Route path={'/Home/:user/:role'} component={User}/>
       <Route path={'/login'} component={Login}/>
       <Route path={'/register'} component={Register} />
       </Switch>
-      
     </Router>
     </div>
   );
@@ -49,14 +46,11 @@ function App() {
 
 export default App;
 
-const Student = (props) => {
+const User = (props) => {
   const {user} = useParams();
   const {role} = useParams();
   const history = useHistory();
   let { path, url } = useRouteMatch();
-  useEffect(() => {
-}, [props]);
-
   return (
     <div className="Main d-flex">
     <SideBar role={role} user={user}/>
